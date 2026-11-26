@@ -10,104 +10,114 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Charm:wght@400;700&family=Sarabun:wght@400;500;700&display=swap">
 <style>
-/* Layout: one column of lacquer-and-gold panels, a sticky header with progress, mode tabs, and one active play area */
+/* Layout: lacquer-red header with a ประจำยาม border, mode tabs, one manuscript-framed play panel. Each king has a painted emblem that carries the memory hook. */
 :root{
-  --bg:#f6ecd6;        /* aged palm-leaf cream */
-  --paper:#fffaf0;
-  --ink:#3a1f12;
-  --muted:#7a5a44;
-  --red:#8e1b1b;       /* lacquer red */
-  --red-deep:#5e0f10;
-  --gold:#b8862b;
-  --gold-soft:#e9cf8f;
-  --line:#dcc49a;
-  --ok:#2f7a3f;
-  --bad:#b3261e;
-  --d-uthong:#2e6a8a;
-  --d-suphan:#a3302a;
-  --d-sukho:#c47a12;
-  --d-prasat:#6c3f80;
-  --d-phlu:#3c7a48;
-  --font-display:"Charm","Sarabun",serif;
-  --font-body:"Sarabun","Leelawadee UI","Tahoma",sans-serif;
-  --r:14px;
+  --bg:#f4e8cf;--paper:#fffaf0;--paper-2:#fbf1dc;--ink:#3a1f12;--muted:#7a5a44;
+  --red:#8e1b1b;--red-deep:#5e0f10;--gold:#b8862b;--gold-soft:#e9cf8f;--line:#dcc49a;
+  --ok:#2f7a3f;--bad:#b3261e;
+  --d-uthong:#2e6a8a;--d-suphan:#a3302a;--d-sukho:#c47a12;--d-prasat:#6c3f80;--d-phlu:#3c7a48;
+  --font-display:"Charm","Sarabun",serif;--font-body:"Sarabun","Leelawadee UI","Tahoma",sans-serif;--r:14px;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#1c1010;--paper:#2a1817;--ink:#f5e7cc;--muted:#c9ab8a;--red:#d65a4c;--red-deep:#a33a30;
+  --bg:#1c1010;--paper:#2a1817;--paper-2:#321e1c;--ink:#f5e7cc;--muted:#c9ab8a;--red:#d65a4c;--red-deep:#4a0c0d;
   --gold:#e2b860;--gold-soft:#5a4420;--line:#4f3328;--ok:#6cc27d;--bad:#ff8a7a;
-  --d-uthong:#5aa2c6;--d-suphan:#e0675c;--d-sukho:#e9a23d;--d-prasat:#b07fd0;--d-phlu:#6fbf7e;color-scheme:dark}}
+  --d-uthong:#3f86ab;--d-suphan:#b9463d;--d-sukho:#c98a25;--d-prasat:#8a5aa3;--d-phlu:#4b8f58;color-scheme:dark}}
 :root[data-theme="dark"]{
-  --bg:#1c1010;--paper:#2a1817;--ink:#f5e7cc;--muted:#c9ab8a;--red:#d65a4c;--red-deep:#a33a30;
+  --bg:#1c1010;--paper:#2a1817;--paper-2:#321e1c;--ink:#f5e7cc;--muted:#c9ab8a;--red:#d65a4c;--red-deep:#4a0c0d;
   --gold:#e2b860;--gold-soft:#5a4420;--line:#4f3328;--ok:#6cc27d;--bad:#ff8a7a;
-  --d-uthong:#5aa2c6;--d-suphan:#e0675c;--d-sukho:#e9a23d;--d-prasat:#b07fd0;--d-phlu:#6fbf7e;color-scheme:dark}
+  --d-uthong:#3f86ab;--d-suphan:#b9463d;--d-sukho:#c98a25;--d-prasat:#8a5aa3;--d-phlu:#4b8f58;color-scheme:dark}
 
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:17px;line-height:1.6;
-  background-image:radial-gradient(circle at 20% 0%, color-mix(in srgb,var(--gold) 12%,transparent), transparent 50%);}
+  background-image:radial-gradient(circle at 15% 0%, color-mix(in srgb,var(--gold) 14%,transparent), transparent 45%),
+    radial-gradient(circle at 100% 60%, color-mix(in srgb,var(--red) 7%,transparent), transparent 40%)}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--red-deep)}
 button{font:inherit;color:inherit;cursor:pointer}
-button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
-.wrap{max-width:720px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 48px}
+button:focus-visible,input:focus-visible,select:focus-visible,.card:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.wrap{max-width:720px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 56px}
+svg{display:block}
 
-header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--red-deep);color:#f8e6b8;
-  border-bottom:3px solid var(--gold);box-shadow:0 2px 10px rgb(0 0 0 / .2)}
-header .wrap{padding-block:10px 10px;display:grid;gap:6px}
-.brand{display:flex;align-items:center;gap:10px;justify-content:space-between;flex-wrap:wrap}
-.brand h1{font-family:var(--font-display);font-size:1.55rem;margin:0;line-height:1.2;font-weight:700;color:#f6d98a;text-wrap:balance}
-.stats{display:flex;gap:8px;flex-wrap:wrap;font-size:.85rem}
-.chip{border:1px solid #c99a45;border-radius:999px;padding:2px 10px;background:rgb(0 0 0 / .18);font-variant-numeric:tabular-nums;white-space:nowrap}
+/* header */
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;color:#f8e6b8;
+  background:linear-gradient(180deg,#7a1414,var(--red-deep));box-shadow:0 3px 12px rgb(0 0 0 / .25)}
+header::after{content:"";display:block;height:12px;border-top:2px solid #d8a943;border-bottom:2px solid #d8a943;background-color:#5e0f10;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='12' viewBox='0 0 24 12'%3E%3Cpath d='M12 1Q15 6 12 11Q9 6 12 1Z M6 6Q12 3 18 6Q12 9 6 6Z' fill='%23e9c46a'/%3E%3Ccircle cx='12' cy='6' r='1.5' fill='%237a1414'/%3E%3Cpath d='M0 6H4M20 6H24' stroke='%23e9c46a' stroke-width='1'/%3E%3C/svg%3E");background-repeat:repeat-x;background-position:center}
+header .wrap{padding-block:10px 8px;display:grid;gap:6px}
+.brand{display:flex;align-items:center;gap:10px;justify-content:space-between}
+.brand .logo{display:flex;align-items:center;gap:8px;min-width:0}
+.brand h1{font-family:var(--font-display);font-size:1.5rem;margin:0;line-height:1.2;font-weight:700;color:#f6d98a;text-wrap:balance;text-shadow:0 1px 0 #3a0808}
+.icon-btns{display:flex;gap:6px;flex:none}
+.icon-btn{border:1px solid #c99a45;background:rgb(0 0 0 / .2);border-radius:10px;min-width:44px;height:44px;display:grid;place-items:center;color:#f6d98a;padding:0 8px;font-size:.8rem;font-weight:700;gap:0}
+.icon-btn svg{width:22px;height:22px}
+.stats{display:flex;gap:6px;flex-wrap:wrap;font-size:.82rem}
+.chip{border:1px solid #c99a45;border-radius:999px;padding:1px 10px;background:rgb(0 0 0 / .2);font-variant-numeric:tabular-nums;white-space:nowrap;display:inline-block}
 .chip b{color:#ffe7a6}
-.progress{display:flex;align-items:center;gap:10px;font-size:.85rem}
+.chip.rank{background:#d8a943;color:#3a0d0d;border-color:#f3d27a;font-weight:700}
+.progress{display:flex;align-items:center;gap:10px;font-size:.82rem}
 .bar{flex:1;height:10px;border-radius:99px;background:rgb(0 0 0 / .3);overflow:hidden;border:1px solid #9c7330}
-.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#d9a440,#ffe08a);transition:width .4s}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#d9a440,#ffe08a);transition:width .5s}
 
+/* tabs */
 nav.tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-block:14px}
-nav.tabs button{border:2px solid var(--line);background:var(--paper);border-radius:12px;padding:10px 4px;font-weight:700;font-size:.95rem;min-height:52px;line-height:1.25}
-nav.tabs button span{display:block;font-size:1.2rem}
-nav.tabs button[aria-selected="true"]{background:var(--red);border-color:var(--gold);color:#fff3d2}
-.panel{background:var(--paper);border:2px solid var(--line);border-radius:var(--r);padding:16px;position:relative}
+nav.tabs button{border:2px solid var(--line);background:var(--paper);border-radius:12px;padding:8px 2px 6px;font-weight:700;font-size:.92rem;min-height:62px;line-height:1.2;display:grid;justify-items:center;gap:3px;color:var(--muted);transition:transform .15s}
+nav.tabs button svg{width:26px;height:26px}
+nav.tabs button[aria-selected="true"]{background:linear-gradient(180deg,var(--red),#6d1414);border-color:var(--gold);color:#fff3d2;box-shadow:0 3px 0 #3f0a0a}
+nav.tabs button:active{transform:translateY(2px)}
+
+/* panel = palm-leaf manuscript */
+.panel{background:var(--paper);border:2px solid var(--gold);border-radius:var(--r);padding:18px 16px;position:relative;
+  background-image:repeating-linear-gradient(0deg,transparent 0 31px,color-mix(in srgb,var(--line) 35%,transparent) 31px 32px);
+  box-shadow:0 2px 0 var(--gold-soft),0 8px 24px rgb(60 20 0 / .08)}
 .panel::before{content:"";position:absolute;inset:5px;border:1px solid var(--gold-soft);border-radius:10px;pointer-events:none}
-h2{font-family:var(--font-display);color:var(--red);font-size:1.6rem;margin:0 0 6px;line-height:1.25;text-wrap:balance}
+.orn{position:absolute;width:26px;height:26px;pointer-events:none;color:var(--gold)}
+.orn.tl{top:-9px;left:-9px}.orn.tr{top:-9px;right:-9px}.orn.bl{bottom:-9px;left:-9px}.orn.br{bottom:-9px;right:-9px}
+h2{font-family:var(--font-display);color:var(--red);font-size:1.7rem;margin:0 0 4px;line-height:1.25;text-wrap:balance}
 .hint{color:var(--muted);font-size:.9rem;margin:0 0 10px}
 .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 select{font:inherit;padding:8px 10px;border-radius:10px;border:2px solid var(--line);background:var(--paper);color:var(--ink);min-height:44px;max-width:100%}
 
-.btn{border:2px solid var(--gold);background:var(--paper);border-radius:12px;padding:10px 14px;min-height:48px;font-weight:700}
-.btn.primary{background:var(--red);color:#fff3d2;border-color:var(--gold)}
-.btn.good{background:var(--ok);color:#fff;border-color:var(--ok)}
-.btn.warn{background:var(--paper);color:var(--bad);border-color:var(--bad)}
-.btn:active{transform:translateY(1px)}
+.btn{border:2px solid var(--gold);background:var(--paper);border-radius:12px;padding:10px 12px;min-height:50px;font-weight:700;box-shadow:0 3px 0 var(--gold-soft);transition:transform .1s}
+.btn.primary{background:var(--red);color:#fff3d2;box-shadow:0 3px 0 #3f0a0a}
+.btn.good{background:var(--ok);color:#fff;border-color:var(--ok);box-shadow:0 3px 0 color-mix(in srgb,var(--ok) 60%,#000)}
+.btn.warn{color:var(--bad);border-color:var(--bad);box-shadow:0 3px 0 color-mix(in srgb,var(--bad) 35%,transparent)}
+.btn:active{transform:translateY(3px);box-shadow:none}
 .btn-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
 .btn-grid.two{grid-template-columns:1fr 1fr}
 
+/* emblem portrait */
+.portrait{border-radius:50%;overflow:hidden;background:var(--paper);display:block}
+.portrait img,.portrait svg{width:100%;height:100%;object-fit:cover;display:block}
+.portrait.big{width:200px;height:200px;max-width:100%;border:4px solid var(--gold);box-shadow:0 0 0 4px var(--paper),0 0 0 6px var(--gold-soft),0 8px 20px rgb(0 0 0 / .2)}
+.mini{width:40px;height:40px;flex:none;border:2px solid var(--gold)}
+
 /* flashcard */
-.legend{display:flex;flex-wrap:wrap;gap:6px 12px;font-size:.82rem;color:var(--muted);margin:8px 0}
+.legend{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:.8rem;color:var(--muted);margin:8px 0}
 .legend span{display:inline-flex;align-items:center;gap:5px}
 .legend i{width:12px;height:12px;border-radius:50%;display:inline-block}
-.card-scene{perspective:1200px;margin-top:10px}
-.card{position:relative;width:100%;min-height:430px;transition:transform .55s cubic-bezier(.3,.7,.3,1);transform-style:preserve-3d;cursor:pointer}
+.card-scene{perspective:1200px;margin-top:8px}
+.card{position:relative;width:100%;min-height:450px;transition:transform .6s cubic-bezier(.3,.7,.3,1);transform-style:preserve-3d;cursor:pointer;border-radius:var(--r)}
 .card.flipped{transform:rotateY(180deg)}
 .face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:var(--r);border:3px solid var(--gold);
-  background:var(--paper);padding:18px;display:flex;flex-direction:column;overflow:auto}
-.face.front{align-items:center;justify-content:center;gap:10px;text-align:center;
-  background:radial-gradient(circle at 50% 35%, color-mix(in srgb,var(--gold) 18%,var(--paper)), var(--paper) 70%)}
-.face.back{transform:rotateY(180deg);gap:8px}
-.portrait{width:190px;height:190px;max-width:100%;border-radius:50%;overflow:hidden;border:4px solid var(--gold);box-shadow:0 4px 14px rgb(0 0 0 / .18);background:var(--paper)}
-.portrait img,.portrait svg{width:100%;height:100%;object-fit:cover;display:block}
-.big-order{font-family:var(--font-display);font-size:2rem;color:var(--red);line-height:1}
-.tap{font-size:.85rem;color:var(--muted)}
+  background:var(--paper);padding:18px;display:flex;flex-direction:column;overflow:auto;box-shadow:inset 0 0 0 5px var(--paper),inset 0 0 0 6px var(--gold-soft)}
+.face.front{align-items:center;justify-content:center;gap:8px;text-align:center;
+  background:radial-gradient(circle at 50% 38%, color-mix(in srgb,var(--gold) 22%,var(--paper)), var(--paper) 68%)}
+.face.back{transform:rotateY(180deg);gap:8px;background:var(--paper-2)}
+.big-order{font-family:var(--font-display);font-size:2.1rem;color:var(--red);line-height:1.1}
+.tap{font-size:.85rem;color:var(--muted);display:flex;gap:6px;align-items:center}
 .dyn-tag{display:inline-block;padding:1px 10px;border-radius:99px;color:#fff;font-size:.82rem;font-weight:700}
 .back-head{display:flex;gap:12px;align-items:center}
-.back-head .portrait{width:74px;height:74px;flex:none;border-width:3px}
-.back-head h3{font-family:var(--font-display);font-size:1.45rem;margin:0;line-height:1.25;color:var(--red)}
+.back-head .portrait{width:78px;height:78px;flex:none;border:3px solid var(--gold)}
+.back-head h3{font-family:var(--font-display);font-size:1.5rem;margin:0;line-height:1.25;color:var(--red)}
 .alt{color:var(--muted);font-size:.9rem}
 dl.facts{margin:4px 0 0;display:grid;gap:6px}
 dl.facts div{display:grid;grid-template-columns:7.2em 1fr;gap:8px;border-bottom:1px dashed var(--line);padding-bottom:6px}
 dl.facts dt{color:var(--muted);font-size:.88rem;font-weight:700}
 dl.facts dd{margin:0;min-width:0}
 .memo{background:color-mix(in srgb,var(--gold) 16%,var(--paper));border-left:4px solid var(--gold);padding:8px 10px;border-radius:8px;font-size:.95rem}
+.emblem-hint{display:flex;gap:8px;align-items:center;font-size:.92rem;background:color-mix(in srgb,var(--red) 8%,var(--paper));border:1px solid color-mix(in srgb,var(--red) 30%,transparent);border-radius:10px;padding:6px 10px}
+.emblem-hint .mini{width:34px;height:34px}
 .pending{color:var(--bad);font-weight:700}
-.status-pill{font-size:.8rem;padding:1px 8px;border-radius:99px;border:1px solid currentColor}
+.status-pill{font-size:.78rem;padding:0 8px;border-radius:99px;border:1px solid currentColor;margin-left:4px}
 .status-pill.ok{color:var(--ok)}.status-pill.no{color:var(--bad)}
 .img-edit{display:grid;gap:6px;margin-top:4px}
 .img-edit input{font:inherit;padding:8px;border-radius:8px;border:2px solid var(--line);background:var(--paper);color:var(--ink);width:100%;min-width:0}
@@ -116,74 +126,117 @@ dl.facts dd{margin:0;min-width:0}
 /* quiz */
 .q-meta{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:.9rem;color:var(--muted);font-variant-numeric:tabular-nums}
 .combo{color:var(--red);font-weight:700}
-.q-text{font-size:1.2rem;font-weight:700;margin:10px 0;line-height:1.5}
-.q-event{background:color-mix(in srgb,var(--gold) 14%,var(--paper));border:1px dashed var(--gold);border-radius:10px;padding:10px;margin:8px 0;font-weight:500}
+.qbar{height:8px;border-radius:99px;background:var(--line);overflow:hidden;margin-top:6px}
+.qbar i{display:block;height:100%;background:linear-gradient(90deg,var(--gold),var(--red));transition:width .4s}
+.q-text{font-size:1.2rem;font-weight:700;margin:12px 0 8px;line-height:1.5}
+.q-event{background:color-mix(in srgb,var(--gold) 14%,var(--paper));border:1px dashed var(--gold);border-radius:10px;padding:10px;margin:0 0 10px;font-weight:500}
+.q-emblem{width:130px;height:130px;margin:0 auto 10px;border:4px solid var(--gold)}
 .opts{display:grid;gap:8px}
-.opt{text-align:left;border:2px solid var(--line);background:var(--paper);border-radius:12px;padding:12px 14px;min-height:54px;font-size:1rem;display:flex;gap:10px;align-items:center}
-.opt .mini{width:34px;height:34px;flex:none}
-.opt.correct{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 15%,var(--paper))}
-.opt.wrong{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 13%,var(--paper))}
+.opt{text-align:left;border:2px solid var(--line);background:var(--paper);border-radius:12px;padding:10px 12px;min-height:58px;font-size:1rem;display:flex;gap:10px;align-items:center;box-shadow:0 3px 0 var(--line);transition:transform .1s}
+.opt:not(:disabled):active{transform:translateY(3px);box-shadow:none}
+.opt.correct{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 15%,var(--paper));box-shadow:0 3px 0 var(--ok)}
+.opt.wrong{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 13%,var(--paper));box-shadow:0 3px 0 var(--bad)}
 .opt:disabled{cursor:default}
 .feedback{margin-top:10px;padding:10px 12px;border-radius:10px;font-size:.95rem}
 .feedback.ok{background:color-mix(in srgb,var(--ok) 14%,var(--paper));border:1px solid var(--ok)}
 .feedback.no{background:color-mix(in srgb,var(--bad) 12%,var(--paper));border:1px solid var(--bad)}
 .result{text-align:center;display:grid;gap:8px;justify-items:center}
+.stars{display:flex;gap:6px}
+.stars svg{width:52px;height:52px}
+.stars .on{color:var(--gold)}.stars .off{color:var(--line)}
 .result .score{font-family:var(--font-display);font-size:3.2rem;color:var(--red);line-height:1}
 .review{text-align:left;width:100%;font-size:.92rem;display:grid;gap:4px;margin-top:6px}
 
 /* sort */
 .sort-list{list-style:none;padding:0;margin:10px 0;display:grid;gap:8px}
-.sort-item{display:flex;align-items:center;gap:10px;border:2px solid var(--line);background:var(--paper);border-radius:12px;padding:8px 10px;touch-action:none;user-select:none;-webkit-user-select:none}
-.sort-item.dragging{border-color:var(--gold);box-shadow:0 6px 18px rgb(0 0 0 / .22);transform:scale(1.02);z-index:2;position:relative}
+.sort-item{display:flex;align-items:center;gap:10px;border:2px solid var(--line);background:var(--paper);border-radius:12px;padding:8px 10px;touch-action:none;user-select:none;-webkit-user-select:none;box-shadow:0 3px 0 var(--line)}
+.sort-item.dragging{border-color:var(--gold);box-shadow:0 8px 20px rgb(0 0 0 / .25);transform:scale(1.03);z-index:2;position:relative}
 .sort-item .grip{font-size:1.3rem;color:var(--muted);cursor:grab;padding:0 2px}
-.sort-item .mini{width:40px;height:40px;flex:none}
 .sort-item .nm{flex:1;min-width:0;font-weight:700;line-height:1.35}
 .sort-item .nm small{display:block;font-weight:400;color:var(--muted)}
-.sort-item .arrows{display:flex;flex-direction:column;gap:2px}
-.sort-item .arrows button{border:1px solid var(--line);background:var(--paper);border-radius:6px;width:34px;height:26px;padding:0;line-height:1}
+.sort-item .arrows{display:flex;flex-direction:column;gap:3px}
+.sort-item .arrows button{border:1px solid var(--line);background:var(--paper);border-radius:6px;width:36px;height:28px;padding:0;line-height:1}
 .sort-item.right{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 12%,var(--paper))}
 .sort-item.off{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 10%,var(--paper))}
 .sort-item .ans{font-weight:700;font-variant-numeric:tabular-nums;min-width:2.5em;text-align:right}
 
 /* timeline */
 .tl{display:grid;gap:14px;margin-top:8px}
-.tl-dyn{border-left:8px solid var(--c);border-radius:6px;background:color-mix(in srgb,var(--c) 7%,var(--paper));padding:8px 10px}
-.tl-dyn h3{margin:0 0 6px;font-family:var(--font-display);font-size:1.3rem;color:var(--c);line-height:1.3}
+.tl-dyn{border-left:8px solid var(--c);border-radius:6px;background:color-mix(in srgb,var(--c) 8%,var(--paper));padding:8px 10px}
+.tl-dyn h3{margin:0 0 6px;font-family:var(--font-display);font-size:1.35rem;color:var(--c);line-height:1.3}
 .tl-dyn h3 small{font-family:var(--font-body);font-size:.8rem;color:var(--muted);font-weight:400}
 .tl-items{display:grid;gap:6px}
-.tl-item{display:flex;gap:10px;align-items:center;text-align:left;width:100%;border:1px solid var(--line);background:var(--paper);border-radius:10px;padding:6px 10px;min-height:52px}
-.tl-item .mini{width:38px;height:38px;flex:none}
+.tl-item{display:flex;gap:10px;align-items:center;text-align:left;width:100%;border:1px solid var(--line);background:var(--paper);border-radius:10px;padding:6px 10px;min-height:54px}
 .tl-item .nm{flex:1;min-width:0;line-height:1.35}
 .tl-item .nm small{display:block;color:var(--muted);font-size:.82rem;font-variant-numeric:tabular-nums}
 .tl-item.special{border-style:dashed;border-color:var(--gold)}
 .tl-item .known{color:var(--ok);font-weight:700}
 
+/* badges */
+.badges{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin-top:8px}
+.badge{border:2px solid var(--line);border-radius:12px;padding:10px 8px;text-align:center;display:grid;justify-items:center;gap:4px;font-size:.85rem;line-height:1.35}
+.badge svg{width:54px;height:54px}
+.badge b{font-size:.92rem}
+.badge.locked{opacity:.45;filter:grayscale(1)}
+.badge.got{border-color:var(--gold);background:color-mix(in srgb,var(--gold) 12%,var(--paper))}
+.ranks{display:grid;gap:4px;font-size:.9rem;margin-top:8px}
+.ranks div{display:flex;justify-content:space-between;border-bottom:1px dashed var(--line);padding:2px 0}
+.ranks .cur{color:var(--red);font-weight:700}
+
 dialog{border:3px solid var(--gold);border-radius:var(--r);background:var(--paper);color:var(--ink);padding:16px;width:min(560px,calc(100vw - 32px));max-height:85vh}
 dialog::backdrop{background:rgb(30 10 5 / .55)}
-.special-card{border:2px dashed var(--gold);border-radius:12px;padding:10px 12px;margin-top:12px;background:color-mix(in srgb,var(--gold) 10%,var(--paper))}
-.special-card h4{margin:0;font-family:var(--font-display);color:var(--red);font-size:1.2rem}
+dialog h3.dt{font-family:var(--font-display);color:var(--red);margin:0;font-size:1.6rem}
+.special-card{border:2px dashed var(--gold);border-radius:12px;padding:10px 12px;margin-top:14px;background:color-mix(in srgb,var(--gold) 10%,var(--paper))}
+.special-card h4{margin:0;font-family:var(--font-display);color:var(--red);font-size:1.25rem}
 .note{font-size:.82rem;color:var(--muted);margin-top:14px}
 
-/* motion */
+.toast{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:translate(-50%,140%);z-index:30;
+  background:var(--red-deep);color:#fbe3a0;border:2px solid #d8a943;border-radius:14px;padding:10px 16px;display:flex;gap:10px;align-items:center;
+  box-shadow:0 8px 24px rgb(0 0 0 / .3);transition:transform .35s cubic-bezier(.2,.9,.3,1.3);max-width:calc(100vw - 32px);font-weight:700}
+.toast.show{transform:translate(-50%,0)}
+.toast svg{width:36px;height:36px;flex:none}
+#fx{position:fixed;inset:0;pointer-events:none;z-index:25;width:100%;height:100%}
+.float-pts{position:fixed;z-index:26;pointer-events:none;font-weight:700;color:var(--ok);font-size:1.3rem;animation:rise 1s ease-out forwards;text-shadow:0 1px 0 var(--paper)}
+@keyframes rise{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(-50px)}}
 @keyframes pop{0%{transform:scale(1)}35%{transform:scale(1.07)}65%{transform:scale(.98)}100%{transform:scale(1)}}
 @keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
+@keyframes glow{0%,100%{box-shadow:0 0 0 0 color-mix(in srgb,var(--gold) 0%,transparent)}50%{box-shadow:0 0 0 6px color-mix(in srgb,var(--gold) 45%,transparent)}}
 .pop{animation:pop .45s ease}
 .shake{animation:shake .42s ease}
-@media (prefers-reduced-motion: reduce){.card{transition:none}.pop,.shake{animation:none}.bar i{transition:none}}
-@media (max-width:420px){nav.tabs button{font-size:.82rem}.card{min-height:470px}.portrait{width:160px;height:160px}dl.facts div{grid-template-columns:1fr;gap:0}}
+.glow{animation:glow 1s ease 2}
+@media (prefers-reduced-motion: reduce){.card{transition:none}.pop,.shake,.glow,.float-pts{animation:none}.bar i,.qbar i,.toast{transition:none}}
+@media (max-width:420px){.brand h1{font-size:1.25rem}nav.tabs button{font-size:.8rem}.card{min-height:490px}.portrait.big{width:170px;height:170px}dl.facts div{grid-template-columns:1fr;gap:0}}
 </style>
 </head>
 <body>
 
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="orn" viewBox="0 0 26 26"><path d="M13 1Q17 9 13 25Q9 9 13 1Z M1 13Q9 9 25 13Q9 17 1 13Z" fill="currentColor"/><circle cx="13" cy="13" r="4" fill="#8e1b1b" stroke="currentColor" stroke-width="1.5"/></symbol>
+  <symbol id="i-card" viewBox="0 0 26 26"><rect x="5" y="3" width="16" height="20" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M13 8L15 12L13 16L11 12Z" fill="currentColor"/></symbol>
+  <symbol id="i-quiz" viewBox="0 0 26 26"><circle cx="13" cy="13" r="10" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M10 10a3 3 0 1 1 4.5 2.6c-1 .6-1.5 1.2-1.5 2.4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="13" cy="18.5" r="1.4" fill="currentColor"/></symbol>
+  <symbol id="i-sort" viewBox="0 0 26 26"><path d="M8 4V22M4 8L8 4L12 8M18 22V4M14 18L18 22L22 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-scroll" viewBox="0 0 26 26"><path d="M6 4H20V20a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V18H16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><path d="M9 9H16M9 13H16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-sound" viewBox="0 0 26 26"><path d="M4 10H8L14 5V21L8 16H4Z" fill="currentColor"/><path d="M17.5 9.5a5 5 0 0 1 0 7M20 7a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-mute" viewBox="0 0 26 26"><path d="M4 10H8L14 5V21L8 16H4Z" fill="currentColor"/><path d="M17 10L23 16M23 10L17 16" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
+  <symbol id="i-medal" viewBox="0 0 26 26"><path d="M8 2H12L14 9H10Z M14 2H18L16 9H12Z" fill="currentColor"/><circle cx="13" cy="16" r="7.5" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M13 12L14.3 14.7L17 15L15 16.9L15.5 19.6L13 18.3L10.5 19.6L11 16.9L9 15L11.7 14.7Z" fill="currentColor"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 2L14.9 8.6L22 9.3L16.6 14L18.2 21L12 17.3L5.8 21L7.4 14L2 9.3L9.1 8.6Z" fill="currentColor"/></symbol>
+</svg>
+
 <header>
   <div class="wrap">
     <div class="brand">
-      <h1>จำ 33 กษัตริย์กรุงศรีอยุธยา</h1>
-      <div class="stats">
-        <span class="chip">คะแนน <b id="sScore">0</b></span>
-        <span class="chip">คอมโบ <b id="sCombo">0</b></span>
-        <span class="chip">สูงสุด <b id="sBest">0</b></span>
+      <div class="logo"><h1>จำ 33 กษัตริย์กรุงศรีอยุธยา</h1></div>
+      <div class="icon-btns">
+        <button class="icon-btn" id="btnBadges" aria-label="ยศและตราเหรียญ"><svg><use href="#i-medal"/></svg></button>
+        <button class="icon-btn" id="btnSound" aria-label="ปิดเสียง"><svg><use href="#i-sound"/></svg></button>
       </div>
+    </div>
+    <div class="stats">
+      <span class="chip rank" id="sRank">ไพร่</span>
+      <span class="chip">คะแนน <b id="sScore">0</b></span>
+      <span class="chip">คอมโบ <b id="sCombo">0</b></span>
+      <span class="chip">สูงสุด <b id="sBest">0</b></span>
+      <span class="chip">เรียนติดกัน <b id="sStreak">1</b> วัน</span>
     </div>
     <div class="progress"><span>จำได้แล้ว <b id="pTxt">0/33</b></span><div class="bar" aria-hidden="true"><i id="pBar"></i></div></div>
   </div>
@@ -191,15 +244,15 @@ dialog::backdrop{background:rgb(30 10 5 / .55)}
 
 <main class="wrap">
   <nav class="tabs" role="tablist">
-    <button role="tab" data-mode="flash" aria-selected="true"><span>🃏</span>แฟลชการ์ด</button>
-    <button role="tab" data-mode="quiz" aria-selected="false"><span>❓</span>ควิซ</button>
-    <button role="tab" data-mode="sort" aria-selected="false"><span>↕️</span>เรียงลำดับ</button>
-    <button role="tab" data-mode="timeline" aria-selected="false"><span>📜</span>ไทม์ไลน์</button>
+    <button role="tab" data-mode="flash" aria-selected="true"><svg><use href="#i-card"/></svg>แฟลชการ์ด</button>
+    <button role="tab" data-mode="quiz" aria-selected="false"><svg><use href="#i-quiz"/></svg>ควิซ</button>
+    <button role="tab" data-mode="sort" aria-selected="false"><svg><use href="#i-sort"/></svg>เรียงลำดับ</button>
+    <button role="tab" data-mode="timeline" aria-selected="false"><svg><use href="#i-scroll"/></svg>ไทม์ไลน์</button>
   </nav>
 
   <section class="panel" id="view-flash">
     <h2>แฟลชการ์ด</h2>
-    <p class="hint">แตะการ์ดเพื่อพลิก การ์ดที่กด "ยังไม่ได้" จะวนกลับมาเร็วขึ้น สีวงกลมบอกราชวงศ์</p>
+    <p class="hint">ภาพบนเหรียญคือ "ภาพช่วยจำ" ของแต่ละพระองค์ สีบอกราชวงศ์ แตะการ์ดเพื่อพลิก</p>
     <div class="row">
       <label for="fDyn" class="hint" style="margin:0">ราชวงศ์</label>
       <select id="fDyn"></select>
@@ -209,7 +262,7 @@ dialog::backdrop{background:rgb(30 10 5 / .55)}
     <div class="card-scene"><div class="card" id="card" tabindex="0" role="button" aria-label="พลิกการ์ด"></div></div>
     <div class="btn-grid">
       <button class="btn" id="fPrev">◀ ก่อนหน้า</button>
-      <button class="btn" id="fRand">🎲 สุ่ม</button>
+      <button class="btn" id="fRand">สุ่ม</button>
       <button class="btn" id="fNext">ถัดไป ▶</button>
     </div>
     <div class="btn-grid two">
@@ -223,11 +276,11 @@ dialog::backdrop{background:rgb(30 10 5 / .55)}
 
   <section class="panel" id="view-sort" hidden>
     <h2>เรียงลำดับการครองราชย์</h2>
-    <p class="hint">ลากที่ ⠿ หรือกดลูกศร เรียงจากครองราชย์ก่อน (บน) ไปหลัง (ล่าง)</p>
+    <p class="hint">ลากที่ ⠿ หรือกดลูกศร เรียงจากครองราชย์ก่อน (บน) ไปหลัง (ล่าง) ใช้ภาพช่วยจำเป็นตัวช่วย</p>
     <ol class="sort-list" id="sortList"></ol>
     <div class="feedback" id="sortFb" hidden></div>
     <div class="btn-grid two">
-      <button class="btn" id="sortNew">🔄 ชุดใหม่</button>
+      <button class="btn" id="sortNew">ชุดใหม่</button>
       <button class="btn primary" id="sortCheck">ตรวจคำตอบ</button>
     </div>
   </section>
@@ -239,199 +292,318 @@ dialog::backdrop{background:rgb(30 10 5 / .55)}
     <div class="tl" id="tl"></div>
   </section>
 
-  <p class="note">ปีครองราชย์อ้างอิงพระราชพงศาวดารกรุงศรีอยุธยาที่ใช้ในแบบเรียนทั่วไป บางฉบับต่างกัน 1–2 ปี ช่องที่เขียน "(รอตรวจสอบ)" ยังไม่ได้ยืนยันข้อมูล</p>
+  <p class="note">ปีครองราชย์อ้างอิงพระราชพงศาวดารกรุงศรีอยุธยาที่ใช้ในแบบเรียนทั่วไป บางฉบับต่างกัน 1–2 ปี ช่องที่เขียน "(รอตรวจสอบ)" ยังไม่ได้ยืนยันข้อมูล ภาพช่วยจำเป็นสัญลักษณ์ที่วาดขึ้นเพื่อช่วยจำ ไม่ใช่พระบรมสาทิสลักษณ์</p>
 </main>
 
 <dialog id="dlg"><div id="dlgBody"></div><div class="btn-grid two" style="margin-top:12px"><span></span><button class="btn primary" id="dlgClose">ปิด</button></div></dialog>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<canvas id="fx" aria-hidden="true"></canvas>
 
 <script>
 const DYN = {
-  'อู่ทอง':      {v:'--d-uthong', range:'พ.ศ. 1893–1952 (สลับกับสุพรรณภูมิ)'},
-  'สุพรรณภูมิ':  {v:'--d-suphan', range:'พ.ศ. 1913–2112'},
-  'สุโขทัย':     {v:'--d-sukho',  range:'พ.ศ. 2112–2173'},
-  'ปราสาททอง':   {v:'--d-prasat', range:'พ.ศ. 2173–2231'},
-  'บ้านพลูหลวง': {v:'--d-phlu',   range:'พ.ศ. 2231–2310'}
+  'อู่ทอง':      {v:'--d-uthong', hex:'#2e6a8a'},
+  'สุพรรณภูมิ':  {v:'--d-suphan', hex:'#a3302a'},
+  'สุโขทัย':     {v:'--d-sukho',  hex:'#c47a12'},
+  'ปราสาททอง':   {v:'--d-prasat', hex:'#6c3f80'},
+  'บ้านพลูหลวง': {v:'--d-phlu',   hex:'#3c7a48'}
 };
 const P = '(รอตรวจสอบ)';
 const KINGS = [
  {order:1,name:'สมเด็จพระรามาธิบดีที่ 1',altName:'พระเจ้าอู่ทอง',dynasty:'อู่ทอง',reignYears:'1893–1912',
   keyEvent:'สถาปนากรุงศรีอยุธยาเป็นราชธานี พ.ศ. 1893 · ตรากฎหมายสำคัญ เช่น กฎหมายลักษณะพยาน และลักษณะผัวเมีย',
-  funFact:'"อู่ทองสร้างอู่" ผู้สร้างกรุงคือพระองค์แรก',image:''},
+  funFact:'"อู่ทองสร้างอู่" ผู้สร้างกรุงคือพระองค์แรก',icon:'city',hint:'ปรางค์กับประตูเมือง = สร้างกรุง',image:''},
  {order:2,name:'สมเด็จพระราเมศวร',altName:'ครองราชย์ 2 ครั้ง',dynasty:'อู่ทอง',reignYears:'1912–1913 และ 1931–1938',
   keyEvent:'ครั้งแรกถวายราชสมบัติให้ขุนหลวงพะงั่ว · ครั้งที่ 2 ยึดอำนาจคืนจากเจ้าทองลัน และยกทัพตีเชียงใหม่',
-  funFact:'พระองค์เดียวที่ขึ้นครองราชย์ 2 รอบ "ราเมศวรกลับมาเสมอ"',image:''},
+  funFact:'พระองค์เดียวที่ขึ้นครองราชย์ 2 รอบ "ราเมศวรกลับมาเสมอ"',icon:'repeat',hint:'ลูกศรวน 2 รอบ = ครองราชย์ 2 ครั้ง',image:''},
  {order:3,name:'สมเด็จพระบรมราชาธิราชที่ 1',altName:'ขุนหลวงพะงั่ว',dynasty:'สุพรรณภูมิ',reignYears:'1913–1931',
   keyEvent:'ยกทัพตีสุโขทัยหลายครั้ง จนสุโขทัยยอมเป็นเมืองประเทศราช',
-  funFact:'พะงั่วเป็นลุงของราเมศวร และเป็นกษัตริย์องค์แรกจากสายสุพรรณภูมิ',image:''},
+  funFact:'พะงั่วเป็นลุงของราเมศวร และเป็นกษัตริย์องค์แรกจากสายสุพรรณภูมิ',icon:'sword',hint:'ดาบ = ยกทัพตีสุโขทัย',image:''},
  {order:4,name:'สมเด็จพระเจ้าทองลัน',altName:'เจ้าทองจันทร์',dynasty:'สุพรรณภูมิ',reignYears:'1931 (ราว 7 วัน)',
   keyEvent:'ถูกสมเด็จพระราเมศวรยึดอำนาจและสำเร็จโทษ',
-  funFact:'"ทองลัน 7 วัน" ครองราชย์สั้นมาก',image:''},
+  funFact:'"ทองลัน 7 วัน" ครองราชย์สั้นมาก',icon:'hourglass',hint:'นาฬิกาทราย = ครองราชย์แค่ 7 วัน',image:''},
  {order:5,name:'สมเด็จพระรามราชาธิราช',altName:'พระยาราม',dynasty:'อู่ทอง',reignYears:'1938–1952',
   keyEvent:'ขัดแย้งกับเจ้าเสนาบดี จนเจ้านครอินทร์ยึดอำนาจ แล้วถูกส่งไปอยู่เมืองปทาคูจาม',
-  funFact:'กษัตริย์องค์สุดท้ายของราชวงศ์อู่ทอง',image:''},
+  funFact:'กษัตริย์องค์สุดท้ายของราชวงศ์อู่ทอง',icon:'exit',hint:'ลูกศรออกประตู = ถูกส่งออกไปปทาคูจาม',image:''},
  {order:6,name:'สมเด็จพระอินทราชา',altName:'สมเด็จพระนครินทราธิราช / เจ้านครอินทร์',dynasty:'สุพรรณภูมิ',reignYears:'1952–1967',
   keyEvent:'เคยเสด็จไปจีน มีสัมพันธไมตรีกับราชวงศ์หมิง · เจ้าอ้ายกับเจ้ายี่ชนช้างแย่งราชสมบัติจนสิ้นพระชนม์ทั้งคู่',
-  funFact:'จำ "เจ้าอ้าย เจ้ายี่ เจ้าสาม" ลูกคนที่ 3 ได้ครองราชย์ต่อ',image:''},
+  funFact:'จำ "เจ้าอ้าย เจ้ายี่ เจ้าสาม" ลูกคนที่ 3 ได้ครองราชย์ต่อ',icon:'junk',hint:'เรือสำเภาจีน = เคยเสด็จไปจีน',image:''},
  {order:7,name:'สมเด็จพระบรมราชาธิราชที่ 2',altName:'เจ้าสามพระยา',dynasty:'สุพรรณภูมิ',reignYears:'1967–1991',
   keyEvent:'ตีเมืองพระนครหลวง (นครธม) ของเขมรได้ พ.ศ. 1974 · สร้างวัดราชบูรณะ',
-  funFact:'กรุวัดราชบูรณะพบเครื่องทองจำนวนมาก นึกถึง "สามพระยา = สามสิ่งทอง"',image:''},
+  funFact:'กรุวัดราชบูรณะพบเครื่องทองจำนวนมาก',icon:'gem',hint:'อัญมณี = เครื่องทองกรุวัดราชบูรณะ',image:''},
  {order:8,name:'สมเด็จพระบรมไตรโลกนาถ',altName:'',dynasty:'สุพรรณภูมิ',reignYears:'1991–2031',
   keyEvent:'ปฏิรูปการปกครอง แยกฝ่ายทหาร–พลเรือน ปรับจตุสดมภ์ · ตราระบบศักดินา · ประทับที่พิษณุโลก',
-  funFact:'"ไตรโลก" จัดระเบียบทั้งแผ่นดิน นึกถึงการจัดระบบบ้านเมือง',image:''},
+  funFact:'"ไตรโลก" จัดระเบียบทั้งแผ่นดิน',icon:'pillars',hint:'เสา 4 ต้น = จตุสดมภ์ ปฏิรูปการปกครอง',image:''},
  {order:9,name:'สมเด็จพระบรมราชาธิราชที่ 3',altName:'สมเด็จพระอินทราชาที่ 2',dynasty:'สุพรรณภูมิ',reignYears:'2031–2034',
   keyEvent:'พระราชโอรสของพระบรมไตรโลกนาถ ครองอยุธยาขณะพระราชบิดาประทับพิษณุโลก · เหตุการณ์อื่น '+P,
-  funFact:'เป็นพี่น้องกับลำดับ 10 (รามาธิบดีที่ 2) ลูกไตรโลกทั้งคู่',image:''},
+  funFact:'เป็นพี่น้องกับลำดับ 10 (รามาธิบดีที่ 2) ลูกไตรโลกทั้งคู่',icon:'brothers',hint:'สองพี่น้อง = พี่ของรามาธิบดีที่ 2',image:''},
  {order:10,name:'สมเด็จพระรามาธิบดีที่ 2',altName:'',dynasty:'สุพรรณภูมิ',reignYears:'2034–2072',
   keyEvent:'โปรตุเกสเข้ามาเป็นชาติตะวันตกชาติแรก พ.ศ. 2054 · หล่อพระศรีสรรเพชญ์ · ตำราพิชัยสงคราม',
-  funFact:'"ฝรั่งชาติแรกมาตอนรามาสอง" โปรตุเกส 2054',image:''},
+  funFact:'"ฝรั่งชาติแรกมาตอนรามาสอง" โปรตุเกส 2054',icon:'ship',hint:'เรือใบกางเขน = โปรตุเกสชาติแรก',image:''},
  {order:11,name:'สมเด็จพระบรมราชาธิราชที่ 4',altName:'หน่อพุทธางกูร',dynasty:'สุพรรณภูมิ',reignYears:'2072–2076',
   keyEvent:'สิ้นพระชนม์ด้วยไข้ทรพิษ (ฝีดาษ)',
-  funFact:'ครองราชย์ราว 4 ปี แล้วส่งต่อให้โอรสวัยราว 5 พรรษา',image:''},
+  funFact:'ครองราชย์ราว 4 ปี แล้วส่งต่อให้โอรสวัยราว 5 พรรษา',icon:'thermo',hint:'ปรอทวัดไข้ = ไข้ทรพิษ',image:''},
  {order:12,name:'สมเด็จพระรัษฎาธิราช',altName:'',dynasty:'สุพรรณภูมิ',reignYears:'2076–2077',
   keyEvent:'ขึ้นครองราชย์ตอนพระชนมายุราว 5 พรรษา ครองได้ราว 5 เดือน แล้วถูกพระไชยราชาสำเร็จโทษ',
-  funFact:'"5 ขวบ 5 เดือน" กษัตริย์เด็กองค์แรก',image:''},
+  funFact:'"5 ขวบ 5 เดือน" กษัตริย์เด็กองค์แรก',icon:'child',hint:'เด็กสวมมงกุฎ = กษัตริย์ 5 พรรษา',image:''},
  {order:13,name:'สมเด็จพระไชยราชาธิราช',altName:'',dynasty:'สุพรรณภูมิ',reignYears:'2077–2089',
   keyEvent:'สงครามกับพม่าครั้งแรก (สงครามเชียงกราน พ.ศ. 2081) · ใช้ทหารอาสาชาวโปรตุเกส',
-  funFact:'"ไชย" = ชัยชนะ ศึกพม่าครั้งแรก',image:''},
+  funFact:'"ไชย" = ชัยชนะ ศึกพม่าครั้งแรก',icon:'shield',hint:'โล่ = ศึกพม่าครั้งแรก',image:''},
  {order:14,name:'สมเด็จพระยอดฟ้า',altName:'พระแก้วฟ้า',dynasty:'สุพรรณภูมิ',reignYears:'2089–2091',
   keyEvent:'ขึ้นครองราชย์ตอนพระชนมายุราว 11 พรรษา ท้าวศรีสุดาจันทร์ (พระมารดา) ว่าราชการแทน แล้วถูกสำเร็จโทษ',
-  funFact:'หลังยอดฟ้ามี "ขุนวรวงศาธิราช" คั่น แต่ไม่นับใน 33 พระองค์',image:''},
+  funFact:'หลังยอดฟ้ามี "ขุนวรวงศาธิราช" คั่น แต่ไม่นับใน 33 พระองค์',icon:'fan',hint:'พัด = พระมารดาว่าราชการแทน',image:''},
  {order:15,name:'สมเด็จพระมหาจักรพรรดิ',altName:'พระเทียรราชา',dynasty:'สุพรรณภูมิ',reignYears:'2091–2111',
   keyEvent:'สงครามพระเจ้าตะเบ็งชะเวตี้ สมเด็จพระสุริโยทัยสิ้นพระชนม์บนคอช้าง พ.ศ. 2091 · สงครามช้างเผือก พ.ศ. 2106',
-  funFact:'"จักรพรรดิมีช้างเผือก" ต้นเหตุสงครามช้างเผือก',image:''},
+  funFact:'"จักรพรรดิมีช้างเผือก" ต้นเหตุสงครามช้างเผือก',icon:'elephant',hint:'ช้างเผือก = สงครามช้างเผือก',image:''},
  {order:16,name:'สมเด็จพระมหินทราธิราช',altName:'',dynasty:'สุพรรณภูมิ',reignYears:'2111–2112',
   keyEvent:'เสียกรุงศรีอยุธยาครั้งที่ 1 แก่พม่า (พระเจ้าบุเรงนอง) พ.ศ. 2112',
-  funFact:'องค์สุดท้ายสายสุพรรณภูมิ "มหินทร์ เสียกรุงครั้งแรก"',image:''},
+  funFact:'องค์สุดท้ายสายสุพรรณภูมิ "มหินทร์ เสียกรุงครั้งแรก"',icon:'crack',hint:'กำแพงร้าว = เสียกรุงครั้งที่ 1',image:''},
  {order:17,name:'สมเด็จพระมหาธรรมราชาธิราช',altName:'พระสุธรรมราชา / เดิมคือขุนพิเรนทรเทพ',dynasty:'สุโขทัย',reignYears:'2112–2133',
   keyEvent:'พม่าแต่งตั้งให้ครองกรุงศรีอยุธยาในฐานะเมืองขึ้นของหงสาวดี',
-  funFact:'พระราชบิดาของพระนเรศวรและพระเอกาทศรถ',image:''},
+  funFact:'พระราชบิดาของพระนเรศวรและพระเอกาทศรถ',icon:'chain',hint:'โซ่ = ครองเมืองในฐานะเมืองขึ้น',image:''},
  {order:18,name:'สมเด็จพระนเรศวรมหาราช',altName:'พระองค์ดำ',dynasty:'สุโขทัย',reignYears:'2133–2148',
   keyEvent:'ประกาศอิสรภาพที่เมืองแครง พ.ศ. 2127 · ทำยุทธหัตถีชนะพระมหาอุปราชา พ.ศ. 2135',
-  funFact:'ลำดับ 18 ตรงกับวันกองทัพไทย 18 มกราคม (วันยุทธหัตถี)',image:''},
+  funFact:'ลำดับ 18 ตรงกับวันกองทัพไทย 18 มกราคม (วันยุทธหัตถี)',icon:'swords',hint:'ดาบไขว้ = ยุทธหัตถี กู้อิสรภาพ',image:''},
  {order:19,name:'สมเด็จพระเอกาทศรถ',altName:'พระองค์ขาว',dynasty:'สุโขทัย',reignYears:'2148–2153',
   keyEvent:'ส่งคณะทูตไปฮอลันดา พ.ศ. 2151 · ปรับปรุงการเก็บภาษีอากรและค่าธรรมเนียม',
-  funFact:'"องค์ดำ–องค์ขาว" พี่น้องนักรบคู่กัน',image:''},
+  funFact:'"องค์ดำ–องค์ขาว" พี่น้องนักรบคู่กัน',icon:'windmill',hint:'กังหันลม = ส่งทูตไปฮอลันดา',image:''},
  {order:20,name:'สมเด็จพระศรีเสาวภาคย์',altName:'',dynasty:'สุโขทัย',reignYears:'2153–2154 (ราว 1 ปี)',
   keyEvent:'ครองราชย์ช่วงสั้น แล้วถูกพระศรีศิลป์ยึดราชสมบัติ · รายละเอียดอื่น '+P,
-  funFact:'พระราชโอรสของพระเอกาทศรถ',image:''},
+  funFact:'พระราชโอรสของพระเอกาทศรถ',icon:'eye',hint:'ดวงตา = ครองราชย์ชั่วพริบตา ราว 1 ปี',image:''},
  {order:21,name:'สมเด็จพระเจ้าทรงธรรม',altName:'พระอินทราชา / พระศรีศิลป์',dynasty:'สุโขทัย',reignYears:'2154–2171',
   keyEvent:'พบรอยพระพุทธบาทที่สระบุรี · ชาวญี่ปุ่น (ยามาดะ นางามาสะ / ออกญาเสนาภิมุข) เข้ารับราชการ',
-  funFact:'"ทรงธรรม" นึกถึงพระพุทธบาท สายธรรมะ',image:''},
+  funFact:'"ทรงธรรม" นึกถึงพระพุทธบาท สายธรรมะ',icon:'foot',hint:'รอยพระบาท = พบรอยพระพุทธบาท สระบุรี',image:''},
  {order:22,name:'สมเด็จพระเชษฐาธิราช',altName:'',dynasty:'สุโขทัย',reignYears:'2171–2173',
   keyEvent:'ถูกเจ้าพระยากลาโหมสุริยวงศ์ (ต่อมาคือพระเจ้าปราสาททอง) ยึดอำนาจและสำเร็จโทษ',
-  funFact:'"เชษฐา" แปลว่าพี่ เป็นพระเชษฐาของพระอาทิตยวงศ์',image:''},
+  funFact:'"เชษฐา" แปลว่าพี่ เป็นพระเชษฐาของพระอาทิตยวงศ์',icon:'dagger',hint:'กริช = ถูกขุนนางยึดอำนาจ',image:''},
  {order:23,name:'สมเด็จพระอาทิตยวงศ์',altName:'',dynasty:'สุโขทัย',reignYears:'2173 (ราว 36 วัน)',
   keyEvent:'ขึ้นครองราชย์ตอนพระชนมายุราว 9–10 พรรษา ขุนนางถวายราชสมบัติแก่เจ้าพระยากลาโหมสุริยวงศ์',
-  funFact:'องค์สุดท้ายของราชวงศ์สุโขทัย "อาทิตย์ตกดิน"',image:''},
+  funFact:'องค์สุดท้ายของราชวงศ์สุโขทัย "อาทิตย์ตกดิน"',icon:'sunset',hint:'พระอาทิตย์ตก = องค์สุดท้ายราชวงศ์สุโขทัย',image:''},
  {order:24,name:'สมเด็จพระเจ้าปราสาททอง',altName:'เจ้าพระยากลาโหมสุริยวงศ์',dynasty:'ปราสาททอง',reignYears:'2173–2199',
   keyEvent:'สร้างวัดไชยวัฒนาราม · สร้างปราสาทนครหลวง',
-  funFact:'ตามตำนาน ได้พระนามจากการขุดพบปราสาททองคำ',image:''},
+  funFact:'ตามตำนาน ได้พระนามจากการขุดพบปราสาททองคำ',icon:'prasat',hint:'ปราสาทยอดซ้อน = ปราสาททอง',image:''},
  {order:25,name:'สมเด็จเจ้าฟ้าไชย',altName:'',dynasty:'ปราสาททอง',reignYears:'2199 (ไม่กี่เดือน)',
   keyEvent:'ถูกพระศรีสุธรรมราชาร่วมกับพระนารายณ์ยึดอำนาจ',
-  funFact:'"ไชยไม่ชนะ" ครองราชย์สั้น',image:''},
+  funFact:'"ไชยไม่ชนะ" ครองราชย์สั้น',icon:'candle',hint:'เทียนสั้น = ครองราชย์ไม่กี่เดือน',image:''},
  {order:26,name:'สมเด็จพระศรีสุธรรมราชา',altName:'',dynasty:'ปราสาททอง',reignYears:'2199 (ราว 2–3 เดือน)',
   keyEvent:'ถูกพระนารายณ์ (พระราชนัดดา) ชิงราชสมบัติ',
-  funFact:'เป็นอาของพระนารายณ์',image:''},
+  funFact:'เป็นอาของพระนารายณ์',icon:'key',hint:'กุญแจ = อาที่ส่งบัลลังก์ต่อให้หลาน (พระนารายณ์)',image:''},
  {order:27,name:'สมเด็จพระนารายณ์มหาราช',altName:'',dynasty:'ปราสาททอง',reignYears:'2199–2231',
   keyEvent:'เจริญสัมพันธไมตรีกับฝรั่งเศสสมัยพระเจ้าหลุยส์ที่ 14 ส่งโกษาปานเป็นราชทูต · ประทับที่ลพบุรี · พระโหราธิบดีแต่งจินดามณี',
-  funFact:'"นารายณ์–ฝรั่งเศส–ลพบุรี" ยุคทองวรรณคดี',image:''},
+  funFact:'"นารายณ์–ฝรั่งเศส–ลพบุรี" ยุคทองวรรณคดี',icon:'fleur',hint:'ดอกลิลลี่ฝรั่งเศส = สัมพันธ์กับฝรั่งเศส',image:''},
  {order:28,name:'สมเด็จพระเพทราชา',altName:'',dynasty:'บ้านพลูหลวง',reignYears:'2231–2246',
   keyEvent:'ขับไล่ทหารฝรั่งเศสออกจากป้อมบางกอก · ประหารเจ้าพระยาวิชาเยนทร์ (คอนสแตนติน ฟอลคอน)',
-  funFact:'เดิมเป็นเจ้ากรมช้าง มาจากบ้านพลูหลวง เมืองสุพรรณบุรี',image:''},
+  funFact:'เดิมเป็นเจ้ากรมช้าง มาจากบ้านพลูหลวง เมืองสุพรรณบุรี',icon:'cannon',hint:'ปืนใหญ่ = ขับทหารฝรั่งเศสจากป้อมบางกอก',image:''},
  {order:29,name:'สมเด็จพระสรรเพชญ์ที่ 8',altName:'พระเจ้าเสือ',dynasty:'บ้านพลูหลวง',reignYears:'2246–2251',
   keyEvent:'เรื่องพันท้ายนรสิงห์ขอรับโทษตามกฎมณเฑียรบาล · โปรดให้ขุดคลองโคกขาม',
-  funFact:'"เสือ" เพราะพระอุปนิสัยดุและเด็ดขาด',image:''},
+  funFact:'"เสือ" เพราะพระอุปนิสัยดุและเด็ดขาด',icon:'tiger',hint:'เสือ = พระเจ้าเสือ',image:''},
  {order:30,name:'สมเด็จพระสรรเพชญ์ที่ 9',altName:'พระเจ้าท้ายสระ',dynasty:'บ้านพลูหลวง',reignYears:'2251–2275',
   keyEvent:'ขุดคลองมหาชัยต่อจากคลองโคกขาม · การค้าข้าวกับจีนรุ่งเรือง',
-  funFact:'ชอบประทับพระที่นั่งท้ายสระและทรงตกปลา',image:''},
+  funFact:'ชอบประทับพระที่นั่งท้ายสระและทรงตกปลา',icon:'fish',hint:'ปลา = ทรงตกปลาที่ท้ายสระ',image:''},
  {order:31,name:'สมเด็จพระเจ้าอยู่หัวบรมโกศ',altName:'',dynasty:'บ้านพลูหลวง',reignYears:'2275–2301',
   keyEvent:'ส่งพระอุบาลีไปฟื้นฟูพระพุทธศาสนาที่ลังกา เกิดนิกายสยามวงศ์ พ.ศ. 2296 · วรรณคดีรุ่งเรือง',
-  funFact:'ยุคสงบสุขช่วงสุดท้ายก่อนเสียกรุง',image:''},
+  funFact:'ยุคสงบสุขช่วงสุดท้ายก่อนเสียกรุง',icon:'wheel',hint:'ธรรมจักร = ส่งพระไปลังกา (สยามวงศ์)',image:''},
  {order:32,name:'สมเด็จพระเจ้าอุทุมพร',altName:'ขุนหลวงหาวัด',dynasty:'บ้านพลูหลวง',reignYears:'2301 (ราว 2 เดือน)',
   keyEvent:'สละราชสมบัติให้พระเชษฐาแล้วออกผนวช · ลาผนวชมาช่วยรบเมื่อพม่ายกทัพมา พ.ศ. 2303',
-  funFact:'"หาวัด" เพราะชอบอยู่วัด',image:''},
+  funFact:'"หาวัด" เพราะชอบอยู่วัด',icon:'bowl',hint:'บาตร = ขุนหลวงหาวัด ออกผนวช',image:''},
  {order:33,name:'สมเด็จพระเจ้าเอกทัศ',altName:'พระที่นั่งสุริยาศน์อมรินทร์',dynasty:'บ้านพลูหลวง',reignYears:'2301–2310',
   keyEvent:'เสียกรุงศรีอยุธยาครั้งที่ 2 แก่พม่า พ.ศ. 2310',
-  funFact:'องค์สุดท้าย "2310 กรุงแตก"',image:''}
+  funFact:'องค์สุดท้าย "2310 กรุงแตก"',icon:'flame',hint:'เปลวไฟ = กรุงแตก พ.ศ. 2310',image:''}
 ];
-const SPECIAL = {order:'พิเศษ',name:'ขุนวรวงศาธิราช',altName:'ไม่นับใน 33 พระองค์',dynasty:'—',reignYears:'2091 (ราว 42 วัน)',
+const SPECIAL = {name:'ขุนวรวงศาธิราช',altName:'ไม่นับใน 33 พระองค์',reignYears:'2091 (ราว 42 วัน)',
   keyEvent:'ท้าวศรีสุดาจันทร์ยกขึ้นเป็นกษัตริย์ ขุนนางนำโดยขุนพิเรนทรเทพจับสำเร็จโทษ แล้วอัญเชิญพระเทียรราชาขึ้นครองราชย์',
   funFact:'อยู่ระหว่างลำดับ 14 กับ 15 พงศาวดารส่วนใหญ่ไม่นับเพราะถือว่าชิงราชสมบัติ'};
 
-/* ---------- storage ---------- */
-const store = {
-  get(k,d){try{const v=localStorage.getItem('ay33.'+k);return v==null?d:JSON.parse(v)}catch(e){return d}},
-  set(k,v){try{localStorage.setItem('ay33.'+k,JSON.stringify(v))}catch(e){}}
+/* ---------- emblems ---------- */
+const G='#fbe7a8', DK='rgba(40,15,0,.5)';
+const L=(w=3,c=G)=>`fill="none" stroke="${c}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round"`;
+const ICONS={
+ city:`<path d="M20 2L23 11H26L28 19H31L33 38H7L9 19H12L14 11H17Z"/><path fill="${DK}" d="M16 38V30a4 4 0 0 1 8 0V38Z"/>`,
+ repeat:`<path ${L()} d="M7 18A13 13 0 0 1 29 9"/><path d="M34 4V15L24 12Z"/><path ${L()} d="M33 22A13 13 0 0 1 11 31"/><path d="M6 36V25L16 28Z"/><text x="20" y="25" text-anchor="middle" font-size="15" font-weight="700" font-family="Sarabun,sans-serif">2</text>`,
+ sword:`<path d="M31 3H37V9L14 32L8 26Z"/><path ${L(3.5)} d="M5 22L18 35"/><path ${L(3.5)} d="M10 30L3 37"/>`,
+ hourglass:`<path d="M8 2H32V7H8Z M8 33H32V38H8Z"/><path ${L()} d="M11 7Q11 16 20 20Q29 24 29 33 M29 7Q29 16 20 20Q11 24 11 33"/><path d="M14 33Q20 25 26 33Z M15 11H25Q22 16 20 16Q18 16 15 11Z"/>`,
+ exit:`<path ${L(3.5)} d="M18 4H6V36H18"/><path ${L(3.5)} d="M14 20H35 M28 13L35 20L28 27"/>`,
+ junk:`<path d="M2 27Q20 37 38 27L35 23H5Z"/><path d="M10 4L19 6V22H8Z M22 8L31 10V22H21Z"/><path ${L(1.5,DK)} d="M9 10H19 M9 15H19 M21 14H31 M21 18H31"/>`,
+ gem:`<path d="M8 14L14 5H26L32 14L20 36Z"/><path ${L(1.5,DK)} d="M8 14H32 M14 5L17 14L20 36L23 14L26 5"/>`,
+ pillars:`<path d="M3 13L20 3L37 13Z M3 34H37V38H3Z"/><path d="M6 15H10V33H6Z M14 15H18V33H14Z M22 15H26V33H22Z M30 15H34V33H30Z"/>`,
+ brothers:`<circle cx="12" cy="10" r="5.5"/><circle cx="28" cy="10" r="5.5"/><path d="M3 38Q3 18 12 18Q19 18 20 30Q21 18 28 18Q37 18 37 38Z"/><path ${L(1.5,DK)} d="M20 30V38"/>`,
+ ship:`<path d="M3 27H37L31 35H9Z"/><path ${L(2)} d="M20 2V27"/><path d="M9 6H31V23H9Z"/><path ${L(3,'#a3302a')} d="M20 9V20 M14.5 14H25.5"/>`,
+ thermo:`<path ${L(3.5)} d="M16 26V7a4 4 0 0 1 8 0V26"/><circle cx="20" cy="31" r="7.5"/><path ${L(2)} d="M28 8H33 M28 13H33 M28 18H33"/><path fill="#d8402f" d="M18.5 14H21.5V30H18.5Z"/><circle cx="20" cy="31" r="4.5" fill="#d8402f"/>`,
+ child:`<path d="M13 8L13 2L16.5 5L20 1L23.5 5L27 2L27 8Z"/><circle cx="20" cy="14" r="6"/><path d="M9 38Q9 22 20 22Q31 22 31 38Z"/>`,
+ shield:`<path d="M20 2L34 7V19Q34 31 20 38Q6 31 6 19V7Z"/><path ${L(2.5,DK)} d="M20 8V32 M11 17H29"/>`,
+ fan:`<path d="M20 37L3 14A22 22 0 0 1 37 14Z"/><path ${L(1.5,DK)} d="M20 37L8 9 M20 37L15 6 M20 37L25 6 M20 37L32 9"/><circle cx="20" cy="35" r="2.5" fill="${DK}"/>`,
+ elephant:`<g fill="#ffffff"><ellipse cx="24" cy="19" rx="13" ry="10"/><circle cx="10" cy="16" r="7.5"/><path d="M4 18Q0 30 5 35L8 33Q5 29 8.5 21Z"/><path d="M14 25H19.5V37H14Z M27 25H32.5V37H27Z"/></g><circle cx="8.5" cy="14" r="1.4" fill="#333"/><path ${L(2.2)} d="M9 21Q13 26 17 24"/><path ${L(1.5,'#c9a24a')} d="M13 10Q16 16 13 21"/>`,
+ crack:`<path d="M4 8H36V37H4Z"/><path ${L(1.2,DK)} d="M4 15H36 M4 22H36 M4 29H36 M12 8V15 M26 8V15 M18 15V22 M32 15V22 M10 22V29 M24 22V29 M16 29V37 M30 29V37"/><path ${L(3.2,'#3a0d0d')} d="M22 5L16 15L24 22L17 30L22 39"/>`,
+ chain:`<rect x="2" y="13" width="19" height="13" rx="6.5" ${L(3.8)}/><rect x="19" y="14" width="19" height="13" rx="6.5" ${L(3.8)}/>`,
+ swords:`<path d="M4 2H9L32 27L28 31L4 7Z M36 2H31L8 27L12 31L36 7Z"/><path ${L(3.5)} d="M23 33L33 23 M7 23L17 33 M31 31L37 37 M9 31L3 37"/>`,
+ windmill:`<path d="M15 38L17.5 17H22.5L25 38Z"/><path ${L(5)} d="M20 16L7 3 M20 16L33 3 M20 16L7 29 M20 16L33 29"/><circle cx="20" cy="16" r="3" fill="${DK}"/>`,
+ eye:`<path d="M2 20Q20 3 38 20Q20 37 2 20Z"/><circle cx="20" cy="20" r="7.5" fill="${DK}"/><circle cx="17.5" cy="17.5" r="2.2" fill="#fff"/>`,
+ foot:`<path d="M20 9Q31 9 31 22Q31 38 20 38Q9 38 9 22Q9 9 20 9Z"/><circle cx="11" cy="6" r="2.7"/><circle cx="15.5" cy="4" r="2.7"/><circle cx="20" cy="3.4" r="2.7"/><circle cx="24.5" cy="4" r="2.7"/><circle cx="29" cy="6" r="2.7"/><circle cx="20" cy="24" r="5" ${L(1.6,DK)}/><path ${L(1.2,DK)} d="M20 19V29 M15 24H25"/>`,
+ dagger:`<path d="M20 1Q25 7 21 12Q26 18 22 25H18Q14 18 19 12Q15 7 20 1Z"/><path d="M9 25H31V29H9Z M17.5 29H22.5V38H17.5Z"/>`,
+ sunset:`<path d="M6 28A14 14 0 0 1 34 28Z"/><path ${L(2.6)} d="M2 31H38 M9 36H31 M20 4V9 M7 11L10.5 14.5 M33 11L29.5 14.5"/>`,
+ prasat:`<path d="M20 1L22 7H25L26 13H29L30 19H33L34 27H6L7 19H10L11 13H14L15 7H18Z"/><path d="M4 28H36V38H4Z"/><path fill="${DK}" d="M17 38V32a3 3 0 0 1 6 0V38Z"/>`,
+ candle:`<path d="M15 18H25V38H15Z"/><path fill="#ffd27a" d="M20 3Q28 12 20 16Q12 12 20 3Z"/><path fill="#ff9a3c" d="M20 8Q23 12 20 14Q17 12 20 8Z"/>`,
+ key:`<circle cx="11" cy="20" r="7" ${L(3.8)}/><path ${L(3.8)} d="M18 20H37 M31 20V27 M36 20V25"/>`,
+ fleur:`<path d="M20 2Q28 12 20 25Q12 12 20 2Z M19 23Q8 24 5 14Q4 7 10 8Q8 15 18 19Z M21 23Q32 24 35 14Q36 7 30 8Q32 15 22 19Z M9 22H31V26H9Z M16 26L20 37L24 26Z"/>`,
+ cannon:`<path d="M8 21L34 10L37 17L11 28Z"/><circle cx="14" cy="29" r="7.5" ${L(3)}/><circle cx="14" cy="29" r="2.2"/><circle cx="37" cy="7" r="2.4"/><circle cx="33" cy="4" r="1.6"/>`,
+ tiger:`<path d="M6 14L8 2L17 9Z M34 14L32 2L23 9Z"/><circle cx="20" cy="22" r="14.5"/><path ${L(2.2,'#5a2a05')} d="M20 8.5V14 M15.5 10L16.5 14 M24.5 10L23.5 14 M6 20L11.5 21 M34 20L28.5 21 M7 27L11.5 26 M33 27L28.5 26"/><circle cx="14.5" cy="20" r="2.2" fill="#3a1a05"/><circle cx="25.5" cy="20" r="2.2" fill="#3a1a05"/><path fill="#3a1a05" d="M17 26H23L20 29.5Z"/>`,
+ fish:`<path d="M3 21Q16 6 30 21Q16 36 3 21Z M29 21L38 12V30Z"/><circle cx="10" cy="19" r="2.2" fill="${DK}"/><path ${L(1.6,DK)} d="M17 14Q20.5 21 17 28"/><path ${L(1.6)} d="M10 2V8 M10 8Q10 12 13 11"/>`,
+ wheel:`<circle cx="20" cy="20" r="15.5" ${L(3)}/><circle cx="20" cy="20" r="4.5"/><path ${L(2.2)} d="M20 4.5V35.5 M4.5 20H35.5 M9 9L31 31 M31 9L9 31"/>`,
+ bowl:`<path d="M5 19H35Q35 37 20 37Q5 37 5 19Z"/><path d="M8 17Q20 6 32 17Z"/><circle cx="20" cy="8" r="2.6"/><path ${L(1.6,DK)} d="M9 24H31"/>`,
+ flame:`<path d="M20 1Q34 15 29.5 28Q27.5 37 20 38.5Q12.5 37 10.5 28Q8 18 15 10Q15 19 19 20Q16 10 20 1Z"/><path fill="#c0392b" d="M20 21Q27 28 24.5 33.5Q23 36.5 20 36.5Q17 36.5 15.5 33.5Q14 28 20 21Z"/>`
 };
-let known = new Set(store.get('known',[]));
-let miss = store.get('miss',{});
-let images = store.get('images',{});
-let best = store.get('best',0);
-let score = 0, combo = 0;
-
-const $ = s => document.querySelector(s);
-const esc = s => String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const shuffle = a => {a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
-const byOrder = o => KINGS[o-1];
-const color = k => k.dynasty in DYN ? `var(${DYN[k.dynasty].v})` : 'var(--gold)';
-const shortName = k => k.name.replace(/^สมเด็จ/,'');
-const label = k => k.altName && !k.altName.includes('ครั้ง') ? `${k.name} (${k.altName})` : k.name;
-
-function avatar(k){
-  const img = images[k.order] || k.image;
-  if(img) return `<img src="${esc(img)}" alt="${esc(k.name)}" onerror="this.replaceWith(document.createRange().createContextualFragment(avatarSvg(byOrder(${k.order}))))">`;
-  return avatarSvg(k);
-}
-function avatarSvg(k){
-  const c = color(k);
-  return `<svg viewBox="0 0 100 100" role="img" aria-label="ลำดับ ${k.order}">
-    <circle cx="50" cy="50" r="48" fill="${c}"/>
-    <circle cx="50" cy="50" r="43" fill="none" stroke="#f3d27a" stroke-width="2" stroke-dasharray="3 3"/>
-    <path d="M50 10 L54 22 L58 22 L57 30 L62 30 L61 38 L66 38 L66 46 L34 46 L34 38 L39 38 L38 30 L43 30 L42 22 L46 22 Z" fill="#f3d27a" stroke="#7a5313" stroke-width="1.2"/>
-    <rect x="31" y="46" width="38" height="7" rx="2" fill="#e5b84f" stroke="#7a5313" stroke-width="1.2"/>
-    <circle cx="50" cy="49.5" r="2.2" fill="#a3302a"/>
-    <text x="50" y="84" text-anchor="middle" font-family="Sarabun,sans-serif" font-weight="700" font-size="${k.order>9?26:28}" fill="#fff8e6">${k.order}</text>
+function emblemSvg(k,opt={}){
+  const c=DYN[k.dynasty]?`var(${DYN[k.dynasty].v})`:'#b8862b';
+  const num=opt.num===undefined?k.order:opt.num;
+  return `<svg viewBox="0 0 100 100" role="img" aria-label="ภาพช่วยจำ${num!==false?' ลำดับ '+num:''}">
+    <defs><radialGradient id="sh" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#fff" stop-opacity=".28"/><stop offset=".6" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".25"/></radialGradient></defs>
+    <circle cx="50" cy="50" r="49" fill="${c}"/><circle cx="50" cy="50" r="49" fill="url(#sh)"/>
+    <circle cx="50" cy="50" r="44" fill="none" stroke="#f3d27a" stroke-width="1.6" stroke-dasharray="2.5 3"/>
+    <g transform="translate(${num!==false?27:23} ${num!==false?16:21}) scale(${num!==false?1.15:1.35})" fill="${G}">${ICONS[k.icon]||''}</g>
+    ${num!==false?`<rect x="35" y="70" width="30" height="20" rx="10" fill="#3a0d0d" stroke="#f3d27a" stroke-width="1.6"/><text x="50" y="85.5" text-anchor="middle" font-family="Sarabun,sans-serif" font-weight="700" font-size="15" fill="#fff3c8">${num}</text>`:''}
   </svg>`;
 }
-const mini = k => `<span class="mini portrait" style="border-width:2px">${avatar(k)}</span>`;
-const dynTag = k => `<span class="dyn-tag" style="background:${color(k)}">${esc(k.dynasty)}</span>`;
-const fmt = s => esc(s).replace(/\(รอตรวจสอบ\)/g,'<span class="pending">(รอตรวจสอบ)</span>').replace(/ · /g,'<br>• ');
+window.emblemSvg=emblemSvg;
 
-function saveProgress(){store.set('known',[...known]);store.set('miss',miss);renderStats()}
-function renderStats(){
-  $('#sScore').textContent=score;$('#sCombo').textContent=combo;$('#sBest').textContent=best;
-  $('#pTxt').textContent=`${known.size}/33`;$('#pBar').style.width=(known.size/33*100)+'%';
+/* ---------- storage ---------- */
+const store={get(k,d){try{const v=localStorage.getItem('ay33.'+k);return v==null?d:JSON.parse(v)}catch(e){return d}},
+  set(k,v){try{localStorage.setItem('ay33.'+k,JSON.stringify(v))}catch(e){}}};
+let known=new Set(store.get('known',[])),miss=store.get('miss',{}),images=store.get('images',{}),best=store.get('best',0);
+let badges=new Set(store.get('badges',[])),sortWins=store.get('sortWins',0),muted=store.get('muted',false);
+let score=0,combo=0;
+
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const byOrder=o=>KINGS[o-1];
+const color=k=>k.dynasty in DYN?`var(${DYN[k.dynasty].v})`:'var(--gold)';
+const shortName=k=>k.name.replace(/^สมเด็จ/,'');
+const label=k=>k.altName&&!k.altName.includes('ครั้ง')?`${k.name} (${k.altName})`:k.name;
+
+/* daily streak */
+const dayStr=d=>`${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`;
+let streak=store.get('streak',{last:'',n:0});
+(function(){const t=new Date(),today=dayStr(t),y=new Date(t);y.setDate(t.getDate()-1);
+  if(streak.last!==today){streak.n=streak.last===dayStr(y)?streak.n+1:1;streak.last=today;store.set('streak',streak)}})();
+
+/* ranks: ยศขุนนางตามจำนวนที่จำได้ */
+const RANKS=[[0,'ไพร่'],[3,'ขุน'],[8,'หลวง'],[14,'พระ'],[20,'พระยา'],[27,'เจ้าพระยา'],[33,'สมเด็จเจ้าพระยา']];
+const rankOf=n=>RANKS.filter(r=>n>=r[0]).pop();
+const nextRank=n=>RANKS.find(r=>r[0]>n);
+
+/* ---------- sound ---------- */
+let actx=null;
+function sfx(name){
+  if(muted)return;
+  try{actx=actx||new (window.AudioContext||window.webkitAudioContext)();if(actx.state==='suspended')actx.resume();
+    const N={ok:[[659,0,.12],[988,.09,.25]],bad:[[220,0,.18,'square',.06],[165,.12,.28,'square',.06]],flip:[[880,0,.05,'sine',.08]],
+      win:[[523,0,.15],[659,.12,.15],[784,.24,.15],[1047,.36,.4]],badge:[[784,0,.12],[1047,.1,.12],[1319,.2,.35]],tick:[[1200,0,.03,'sine',.05]]}[name]||[];
+    const shift=name==='ok'?Math.min(combo,8)*40:0;
+    N.forEach(([f,t,d,type,vol])=>{const o=actx.createOscillator(),g=actx.createGain(),s=actx.currentTime+t;
+      o.type=type||'triangle';o.frequency.value=f+shift;g.gain.setValueAtTime(.0001,s);g.gain.exponentialRampToValueAtTime(vol||.2,s+.015);
+      g.gain.exponentialRampToValueAtTime(.0001,s+d);o.connect(g).connect(actx.destination);o.start(s);o.stop(s+d+.05)});
+  }catch(e){}
 }
-function bump(el,cls){if(!el)return;el.classList.remove('pop','shake');void el.offsetWidth;el.classList.add(cls)}
+function renderSoundBtn(){const b=$('#btnSound');b.innerHTML=`<svg><use href="#${muted?'i-mute':'i-sound'}"/></svg>`;b.setAttribute('aria-label',muted?'เปิดเสียง':'ปิดเสียง')}
+$('#btnSound').onclick=()=>{muted=!muted;store.set('muted',muted);renderSoundBtn();sfx('tick')};
 
-/* ---------- details (back of card / dialog) ---------- */
-function details(k, withEdit=true){
-  const st = known.has(k.order) ? '<span class="status-pill ok">จำได้แล้ว</span>' : (miss[k.order] ? `<span class="status-pill no">ยังไม่ได้ ×${miss[k.order]}</span>` : '');
+/* ---------- confetti / toast / floating points ---------- */
+const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+function confetti(n=90){
+  if(reduced)return;const cv=$('#fx'),ctx=cv.getContext('2d');const W=cv.width=innerWidth,H=cv.height=innerHeight;
+  const cols=['#e9c46a','#f6d98a','#b8862b','#a3302a','#fff3c8','#d65a4c'];
+  const ps=Array.from({length:n},()=>({x:W/2+(Math.random()-.5)*W*.3,y:H*.35,vx:(Math.random()-.5)*12,vy:-Math.random()*13-4,r:Math.random()*6+4,a:Math.random()*6,va:(Math.random()-.5)*.3,c:cols[Math.floor(Math.random()*cols.length)],petal:Math.random()<.5}));
+  let f=0;(function step(){ctx.clearRect(0,0,W,H);ps.forEach(p=>{p.vy+=.35;p.vx*=.99;p.x+=p.vx;p.y+=p.vy;p.a+=p.va;ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.a);ctx.fillStyle=p.c;
+    if(p.petal){ctx.beginPath();ctx.ellipse(0,0,p.r,p.r/2.2,0,0,Math.PI*2);ctx.fill()}else ctx.fillRect(-p.r/2,-p.r/4,p.r,p.r/2);ctx.restore()});
+    if(++f<120)requestAnimationFrame(step);else ctx.clearRect(0,0,W,H)})();
+}
+let toastT;
+function toast(html){const t=$('#toast');t.innerHTML=html;t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),2600)}
+function floatPts(el,txt){if(!el||reduced)return;const r=el.getBoundingClientRect();const d=document.createElement('div');d.className='float-pts';d.textContent=txt;
+  d.style.left=(r.left+r.width/2-20)+'px';d.style.top=(r.top-6)+'px';document.body.appendChild(d);setTimeout(()=>d.remove(),1000)}
+function bump(el,cls){if(!el)return;el.classList.remove('pop','shake','glow');void el.offsetWidth;el.classList.add(cls)}
+
+/* ---------- badges ---------- */
+const BADGES=[
+ {id:'first',name:'ก้าวแรก',desc:'เล่นควิซจบ 1 ชุด',ic:'foot'},
+ {id:'combo5',name:'คอมโบ 5',desc:'ตอบถูกติดกัน 5 ข้อ',ic:'flame'},
+ {id:'perfect',name:'เต็มสิบ',desc:'ควิซได้ 10/10',ic:'gem'},
+ {id:'sort3',name:'นักลำดับเหตุการณ์',desc:'เรียงถูกทั้งชุด 3 ครั้ง',ic:'pillars'},
+ {id:'streak3',name:'ขยันสามวัน',desc:'เข้ามาเรียน 3 วันติด',ic:'sunset'},
+ ...Object.keys(DYN).map((d,i)=>({id:'dyn'+i,name:'รู้แจ้ง'+d,desc:`จำราชวงศ์${d}ได้ครบ`,ic:['city','crack','swords','prasat','flame'][i],dyn:d})),
+ {id:'all',name:'ครบ 33 พระองค์',desc:'จำได้ครบทุกพระองค์',ic:'wheel'}
+];
+function badgeSvg(b,on){const k={icon:b.ic,dynasty:b.dyn||(on?'':'x')};
+  const fill=b.dyn?`var(${DYN[b.dyn].v})`:'#8e1b1b';
+  return `<svg viewBox="0 0 100 100"><path d="M50 3L61 12L75 9L80 23L93 30L88 44L95 57L83 66L82 81L68 83L60 95L50 88L40 95L32 83L18 81L17 66L5 57L12 44L7 30L20 23L25 9L39 12Z" fill="#d8a943"/><circle cx="50" cy="50" r="33" fill="${fill}"/><g transform="translate(29 29) scale(1.05)" fill="${G}">${ICONS[b.ic]}</g></svg>`}
+function award(id){
+  if(badges.has(id))return;badges.add(id);store.set('badges',[...badges]);
+  const b=BADGES.find(x=>x.id===id);sfx('badge');confetti(60);
+  toast(`${badgeSvg(b,true)}<span>ได้ตราใหม่: ${esc(b.name)}</span>`);
+}
+function checkBadges(){
+  if(streak.n>=3)award('streak3');
+  BADGES.filter(b=>b.dyn).forEach(b=>{if(KINGS.filter(k=>k.dynasty===b.dyn).every(k=>known.has(k.order)))award(b.id)});
+  if(known.size===33)award('all');
+}
+$('#btnBadges').onclick=()=>{
+  const r=rankOf(known.size),nx=nextRank(known.size);
+  $('#dlgBody').innerHTML=`<h3 class="dt">ยศและตราเหรียญ</h3>
+    <p style="margin:4px 0">ยศปัจจุบัน <b style="color:var(--red)">${r[1]}</b> ${nx?`· จำอีก ${nx[0]-known.size} พระองค์ เลื่อนเป็น <b>${nx[1]}</b>`:'· ยศสูงสุดแล้ว'}</p>
+    <div class="ranks">${RANKS.map(x=>`<div class="${x===r?'cur':''}"><span>${x[1]}</span><span>จำได้ ${x[0]}+ พระองค์</span></div>`).join('')}</div>
+    <h3 class="dt" style="font-size:1.3rem;margin-top:12px">ตราเหรียญ ${badges.size}/${BADGES.length}</h3>
+    <div class="badges">${BADGES.map(b=>{const on=badges.has(b.id);return `<div class="badge ${on?'got':'locked'}">${badgeSvg(b,on)}<b>${esc(b.name)}</b><span class="alt">${esc(b.desc)}</span></div>`}).join('')}</div>`;
+  $('#dlg').showModal();
+};
+
+/* ---------- avatar ---------- */
+function avatar(k,opt){
+  const img=images[k.order]||k.image;
+  if(img&&!(opt&&opt.num===false))return `<img src="${esc(img)}" alt="${esc(k.name)}" onerror="this.replaceWith(document.createRange().createContextualFragment(emblemSvg(KINGS[${k.order-1}])))">`;
+  return emblemSvg(k,opt);
+}
+window.KINGS=KINGS;
+const mini=(k,opt)=>`<span class="portrait mini">${avatar(k,opt)}</span>`;
+const dynTag=k=>`<span class="dyn-tag" style="background:${color(k)}">${esc(k.dynasty)}</span>`;
+const fmt=s=>esc(s).replace(/\(รอตรวจสอบ\)/g,'<span class="pending">(รอตรวจสอบ)</span>').replace(/ · /g,'<br>• ');
+
+function renderStats(){
+  $('#sScore').textContent=score;$('#sCombo').textContent=combo;$('#sBest').textContent=best;$('#sStreak').textContent=streak.n;
+  $('#pTxt').textContent=`${known.size}/33`;$('#pBar').style.width=(known.size/33*100)+'%';
+  const r=rankOf(known.size)[1];const el=$('#sRank');
+  if(el.textContent!==r&&el.dataset.init){el.textContent=r;bump(el,'pop');toast(`<svg viewBox="0 0 26 26" style="color:#f6d98a"><use href="#i-medal"/></svg><span>เลื่อนยศเป็น "${r}"</span>`);sfx('badge')}
+  else el.textContent=r;el.dataset.init=1;
+}
+function saveProgress(){store.set('known',[...known]);store.set('miss',miss);renderStats();checkBadges()}
+
+/* ---------- details ---------- */
+function details(k,withEdit=true){
+  const st=known.has(k.order)?'<span class="status-pill ok">จำได้แล้ว</span>':(miss[k.order]?`<span class="status-pill no">พลาด ×${miss[k.order]}</span>`:'');
   return `<div class="back-head"><span class="portrait">${avatar(k)}</span>
-     <div style="min-width:0"><div class="alt">ลำดับที่ ${k.order} ${st}</div><h3>${esc(k.name)}</h3>${k.altName?`<div class="alt">${esc(k.altName)}</div>`:''}</div></div>
+     <div style="min-width:0"><div class="alt">ลำดับที่ ${k.order}${st}</div><h3>${esc(k.name)}</h3>${k.altName?`<div class="alt">${esc(k.altName)}</div>`:''}</div></div>
+   <div class="emblem-hint">${mini(k,{num:false})}<span><b>ภาพช่วยจำ:</b> ${esc(k.hint)}</span></div>
    <dl class="facts">
      <div><dt>ราชวงศ์</dt><dd>${dynTag(k)}</dd></div>
      <div><dt>ครองราชย์ (พ.ศ.)</dt><dd>${fmt(k.reignYears)}</dd></div>
      <div><dt>เหตุการณ์สำคัญ</dt><dd>• ${fmt(k.keyEvent)}</dd></div>
    </dl>
-   <div class="memo">💡 ${esc(k.funFact)}</div>
-   ${withEdit?`<button class="link-btn" data-edit="${k.order}">🖼️ เปลี่ยนรูป</button><div class="img-edit" id="ie-${k.order}" hidden>
-     <label for="iu-${k.order}" class="alt">วาง URL รูป (เว้นว่างเพื่อใช้รูปวาดเดิม)</label>
+   <div class="memo">เกร็ดช่วยจำ: ${esc(k.funFact)}</div>
+   ${withEdit?`<button class="link-btn" data-edit="${k.order}">เปลี่ยนรูป</button><div class="img-edit" id="ie-${k.order}" hidden>
+     <label for="iu-${k.order}" class="alt">วาง URL รูป (เว้นว่างเพื่อใช้ภาพช่วยจำเดิม)</label>
      <input id="iu-${k.order}" type="url" inputmode="url" placeholder="https://..." value="${esc(images[k.order]||'')}">
-     <div class="row"><button class="btn primary" data-save="${k.order}">บันทึกรูป</button><button class="btn" data-reset="${k.order}">ใช้รูปวาด</button></div></div>`:''}`;
+     <div class="row"><button class="btn primary" data-save="${k.order}">บันทึกรูป</button><button class="btn" data-reset="${k.order}">ใช้ภาพช่วยจำ</button></div></div>`:''}`;
 }
 document.addEventListener('click',e=>{
   const ed=e.target.closest('[data-edit]'),sv=e.target.closest('[data-save]'),rs=e.target.closest('[data-reset]');
   if(ed||sv||rs||e.target.closest('.img-edit'))e.stopPropagation();
   if(ed){const box=document.getElementById('ie-'+ed.dataset.edit);box.hidden=!box.hidden;if(!box.hidden)box.querySelector('input').focus()}
-  if(sv||rs){const o=(sv||rs).dataset.save||(sv||rs).dataset.reset;
-    const v=sv?document.getElementById('iu-'+o).value.trim():'';
+  if(sv||rs){const o=(sv||rs).dataset.save||(sv||rs).dataset.reset;const v=sv?document.getElementById('iu-'+o).value.trim():'';
     if(v)images[o]=v;else delete images[o];store.set('images',images);refreshAll()}
 },true);
 
-/* ---------- legend ---------- */
-const legendHtml = Object.entries(DYN).map(([n,d])=>`<span><i style="background:var(${d.v})"></i>${n}</span>`).join('');
+/* ---------- legend + ornaments ---------- */
+const legendHtml=Object.keys(DYN).map(n=>`<span><i style="background:var(${DYN[n].v})"></i>${n}</span>`).join('');
 $('#legend').innerHTML=legendHtml;$('#legend2').innerHTML=legendHtml;
+document.querySelectorAll('.panel').forEach(p=>['tl','tr','bl','br'].forEach(c=>p.insertAdjacentHTML('beforeend',`<svg class="orn ${c}" aria-hidden="true"><use href="#orn"/></svg>`)));
 
 /* ---------- flashcards ---------- */
 const fSel=$('#fDyn');
@@ -439,73 +611,60 @@ fSel.innerHTML='<option value="">ทุกราชวงศ์ (33)</option>'+O
 fSel.value=store.get('fDyn','');
 let seq=[],pos=0;
 function buildDeck(){
-  const f=fSel.value;
-  let deck=KINGS.filter(k=>!f||(f==='__todo'?!known.has(k.order):k.dynasty===f)).map(k=>k.order);
-  if(!deck.length)deck=KINGS.map(k=>k.order);
-  seq=deck;pos=0;renderCard();
+  const f=fSel.value;let deck=KINGS.filter(k=>!f||(f==='__todo'?!known.has(k.order):k.dynasty===f)).map(k=>k.order);
+  if(!deck.length)deck=KINGS.map(k=>k.order);seq=deck;pos=0;renderCard();
 }
 function renderCard(flip=false){
-  const k=byOrder(seq[pos]);const card=$('#card');
-  card.classList.toggle('flipped',flip);
+  const k=byOrder(seq[pos]);const card=$('#card');card.classList.toggle('flipped',flip);
   card.innerHTML=`<div class="face front">
-      <div class="portrait">${avatar(k)}</div>
-      <div class="big-order">ลำดับที่ ${k.order}</div>
-      ${dynTag(k)}
-      <div class="tap">แตะเพื่อดูพระนาม</div></div>
+      <span class="portrait big">${avatar(k)}</span>
+      <div class="big-order">ลำดับที่ ${k.order}</div>${dynTag(k)}
+      <div class="tap">แตะเพื่อดูพระนาม${known.has(k.order)?' · <b style="color:var(--ok)">✓ จำได้แล้ว</b>':''}</div></div>
     <div class="face back">${details(k)}</div>`;
   $('#fPos').textContent=`การ์ด ${pos+1}/${seq.length}`;
 }
+function flip(){$('#card').classList.toggle('flipped');sfx('flip')}
 function flashGo(d){pos=(pos+d+seq.length)%seq.length;renderCard()}
-$('#card').addEventListener('click',e=>{if(e.target.closest('.img-edit,[data-edit]'))return;$('#card').classList.toggle('flipped')});
-$('#card').addEventListener('keydown',e=>{if(e.key===' '||e.key==='Enter'){e.preventDefault();$('#card').classList.toggle('flipped')}});
+$('#card').addEventListener('click',e=>{if(e.target.closest('.img-edit,[data-edit]'))return;flip()});
+$('#card').addEventListener('keydown',e=>{if(e.key===' '||e.key==='Enter'){e.preventDefault();flip()}});
 $('#fPrev').onclick=()=>flashGo(-1);
 $('#fNext').onclick=()=>flashGo(1);
 $('#fRand').onclick=()=>{
-  const pool=[...new Set(seq)];
-  const w=pool.map(o=>known.has(o)?1:(miss[o]?3+Math.min(miss[o],4):2));
+  const pool=[...new Set(seq)];const w=pool.map(o=>known.has(o)?1:(miss[o]?3+Math.min(miss[o],4):2));
   let r=Math.random()*w.reduce((a,b)=>a+b,0),pick=pool[0];
   for(let i=0;i<pool.length;i++){r-=w[i];if(r<=0){pick=pool[i];break}}
   if(pool.length>1&&pick===seq[pos])pick=pool[(pool.indexOf(pick)+1)%pool.length];
   pos=seq.indexOf(pick);renderCard();
 };
-$('#fYes').onclick=()=>{const o=seq[pos];known.add(o);miss[o]=0;saveProgress();bump($('.card-scene'),'pop');
-  if(known.size===33)$('#fPos').textContent='🎉 จำครบ 33 พระองค์แล้ว!';
-  setTimeout(()=>flashGo(1),260)};
-$('#fNo').onclick=()=>{const o=seq[pos];known.delete(o);miss[o]=(miss[o]||0)+1;saveProgress();bump($('.card-scene'),'shake');
-  const gap=Math.max(2,4-Math.min(miss[o],2));               // พลาดบ่อย = กลับมาเร็วขึ้น
-  const at=Math.min(pos+1+gap,seq.length);
-  if(seq[at]!==o)seq.splice(at,0,o);
-  setTimeout(()=>flashGo(1),300)};
+$('#fYes').onclick=()=>{const o=seq[pos];const was=known.has(o);known.add(o);miss[o]=0;saveProgress();bump($('.card-scene'),'pop');sfx('ok');
+  if(!was)floatPts($('#fYes'),'+1');if(known.size===33&&!was)confetti(140);setTimeout(()=>flashGo(1),260)};
+$('#fNo').onclick=()=>{const o=seq[pos];known.delete(o);miss[o]=(miss[o]||0)+1;saveProgress();bump($('.card-scene'),'shake');sfx('bad');
+  const gap=Math.max(2,4-Math.min(miss[o],2));const at=Math.min(pos+1+gap,seq.length);if(seq[at]!==o)seq.splice(at,0,o);setTimeout(()=>flashGo(1),300)};
 fSel.onchange=()=>{store.set('fDyn',fSel.value);buildDeck()};
-$('#specialCard').innerHTML=`<h4>⭐ เกร็ดพิเศษ: ${SPECIAL.name}</h4><div class="alt">ระหว่างลำดับ 14–15 · พ.ศ. ${SPECIAL.reignYears}</div><p style="margin:6px 0 0">${esc(SPECIAL.keyEvent)}</p><p class="alt" style="margin:4px 0 0">💡 ${esc(SPECIAL.funFact)}</p>`;
+$('#specialCard').innerHTML=`<h4>เกร็ดพิเศษ: ${SPECIAL.name}</h4><div class="alt">ระหว่างลำดับ 14–15 · พ.ศ. ${SPECIAL.reignYears}</div><p style="margin:6px 0 0">${esc(SPECIAL.keyEvent)}</p><p class="alt" style="margin:4px 0 0">${esc(SPECIAL.funFact)}</p>`;
 
 /* ---------- quiz ---------- */
-const evOK = KINGS.filter(k=>!k.keyEvent.includes(P)||k.keyEvent.split(' · ')[0].indexOf(P)<0);
+const evOK=KINGS.filter(k=>k.keyEvent.split(' · ').some(s=>!s.includes(P)));
 function nearby(o,n,exclude){
-  const c=KINGS.map(k=>k.order).filter(x=>!exclude.includes(x)).sort((a,b)=>Math.abs(a-o)-Math.abs(b-o)+ (Math.random()-.5)*2.5);
-  return c.slice(0,n);
+  return KINGS.map(k=>k.order).filter(x=>!exclude.includes(x)).sort((a,b)=>Math.abs(a-o)-Math.abs(b-o)+(Math.random()-.5)*2.5).slice(0,n);
 }
 function makeQ(type){
-  if(type==='order'){
-    const k=KINGS[Math.floor(Math.random()*33)];
+  if(type==='order'){const k=KINGS[Math.floor(Math.random()*33)];
     return {q:`พระมหากษัตริย์ลำดับที่ ${k.order} คือพระองค์ใด`,ans:k.order,opts:shuffle([k.order,...nearby(k.order,3,[k.order])]),
-      exp:`ลำดับที่ ${k.order} คือ ${label(k)} ราชวงศ์${k.dynasty}`};
-  }
-  if(type==='dyn'){
-    const d=shuffle(Object.keys(DYN))[0];const ins=KINGS.filter(k=>k.dynasty===d);const k=shuffle(ins)[0];
-    const outs=KINGS.filter(k=>k.dynasty!==d).sort((a,b)=>Math.abs(a.order-k.order)-Math.abs(b.order-k.order)).slice(0,6);
+      exp:`ลำดับที่ ${k.order} คือ ${label(k)} ราชวงศ์${k.dynasty}`};}
+  if(type==='emblem'){const k=KINGS[Math.floor(Math.random()*33)];
+    const same=KINGS.filter(x=>x.dynasty===k.dynasty&&x.order!==k.order).map(x=>x.order);
+    let wrong=shuffle(same).slice(0,2);wrong=[...wrong,...nearby(k.order,3,[k.order,...wrong])].slice(0,3);
+    return {q:'ภาพช่วยจำนี้เป็นของพระองค์ใด',emblem:k,ans:k.order,opts:shuffle([k.order,...wrong]),exp:`${k.hint} → ${label(k)} (ลำดับ ${k.order})`};}
+  if(type==='dyn'){const d=shuffle(Object.keys(DYN))[0];const k=shuffle(KINGS.filter(x=>x.dynasty===d))[0];
+    const outs=KINGS.filter(x=>x.dynasty!==d).sort((a,b)=>Math.abs(a.order-k.order)-Math.abs(b.order-k.order)).slice(0,6);
     const wrong=shuffle(outs).slice(0,3).map(x=>x.order);
     return {q:`พระองค์ใดอยู่ในราชวงศ์${d}`,ans:k.order,opts:shuffle([k.order,...wrong]),
-      exp:`${label(k)} (ลำดับ ${k.order}) อยู่ราชวงศ์${d} · ตัวเลือกอื่นอยู่ราชวงศ์${[...new Set(wrong.map(o=>byOrder(o).dynasty))].join(', ')}`};
-  }
-  if(type==='event'){
-    const k=shuffle(evOK)[0];const ev=k.keyEvent.split(' · ').filter(s=>!s.includes(P));const e=shuffle(ev)[0];
+      exp:`${label(k)} (ลำดับ ${k.order}) อยู่ราชวงศ์${d} · ตัวเลือกอื่นอยู่ราชวงศ์${[...new Set(wrong.map(o=>byOrder(o).dynasty))].join(', ')}`};}
+  if(type==='event'){const k=shuffle(evOK)[0];const e=shuffle(k.keyEvent.split(' · ').filter(s=>!s.includes(P)))[0];
     const same=KINGS.filter(x=>x.dynasty===k.dynasty&&x.order!==k.order).map(x=>x.order);
     const wrong=shuffle([...new Set([...shuffle(same).slice(0,2),...nearby(k.order,4,[k.order])])]).filter(x=>x!==k.order).slice(0,3);
-    return {q:'เหตุการณ์นี้เกิดในรัชกาลใด',ev:e,ans:k.order,opts:shuffle([k.order,...wrong]),
-      exp:`เป็นเหตุการณ์ในรัชกาล ${label(k)} (ลำดับ ${k.order}, พ.ศ. ${k.reignYears})`};
-  }
-  // next
+    return {q:'เหตุการณ์นี้เกิดในรัชกาลใด',ev:e,ans:k.order,opts:shuffle([k.order,...wrong]),exp:`เป็นเหตุการณ์ในรัชกาล ${label(k)} (ลำดับ ${k.order}, พ.ศ. ${k.reignYears})`};}
   const p=KINGS[Math.floor(Math.random()*32)];const k=byOrder(p.order+1);
   let cand=shuffle([p.order-1,p.order+2,p.order+3,p.order-2].filter(x=>x>=1&&x<=33&&x!==k.order&&x!==p.order)).slice(0,3);
   if(cand.length<3)cand=[...cand,...nearby(k.order,3-cand.length,[k.order,p.order,...cand])];
@@ -514,57 +673,64 @@ function makeQ(type){
 }
 let quiz=null;
 function startQuiz(){
-  const types=shuffle(['order','order','order','dyn','dyn','event','event','event','next','next']);
-  const seen=new Set();const qs=[];
+  const types=shuffle(['order','order','emblem','emblem','dyn','dyn','event','event','next','next']);
+  const seen=new Set(),qs=[];
   for(const t of types){let q,tries=0;do{q=makeQ(t);tries++}while(seen.has(t+q.ans)&&tries<10);seen.add(t+q.ans);qs.push(q)}
   quiz={qs,i:0,right:0,points:0,log:[]};score=0;combo=0;renderStats();renderQ();
 }
 function renderQ(){
   const v=$('#view-quiz');const q=quiz.qs[quiz.i];
   v.innerHTML=`<h2>ควิซ 10 ข้อ</h2>
-    <div class="q-meta"><span>ข้อ ${quiz.i+1}/10</span><span>ถูก ${quiz.right} ข้อ</span><span class="combo" id="qCombo">${combo>=2?'🔥 คอมโบ x'+combo:''}</span></div>
-    <div class="bar" style="margin-top:6px;border-color:var(--line);background:var(--line)"><i style="width:${quiz.i*10}%"></i></div>
-    <div class="q-text">${esc(q.q)}</div>${q.ev?`<div class="q-event">“${esc(q.ev)}”</div>`:''}
-    <div class="opts">${q.opts.map(o=>{const k=byOrder(o);return `<button class="opt" data-o="${o}">${mini(k)}<span>${esc(k.name)}${k.altName&&!k.altName.includes('ครั้ง')?`<br><small class="alt">${esc(k.altName)}</small>`:''}</span></button>`}).join('')}</div>
+    <div class="q-meta"><span>ข้อ ${quiz.i+1}/10</span><span>ถูก ${quiz.right} ข้อ</span><span class="combo" id="qCombo">${combo>=2?'คอมโบ ×'+combo:''}</span></div>
+    <div class="qbar"><i style="width:${quiz.i*10}%"></i></div>
+    <div class="q-text">${esc(q.q)}</div>
+    ${q.emblem?`<span class="portrait q-emblem">${emblemSvg(q.emblem,{num:false})}</span>`:''}
+    ${q.ev?`<div class="q-event">“${esc(q.ev)}”</div>`:''}
+    <div class="opts">${q.opts.map(o=>{const k=byOrder(o);return `<button class="opt" data-o="${o}">${q.emblem?'':mini(k,{num:false})}<span>${esc(k.name)}${k.altName&&!k.altName.includes('ครั้ง')?`<br><small class="alt">${esc(k.altName)}</small>`:''}</span></button>`}).join('')}</div>
     <div id="qFb"></div>`;
   v.querySelectorAll('.opt').forEach(b=>b.onclick=()=>answer(+b.dataset.o,b));
+  v.querySelectorAll('.orn').length||['tl','tr','bl','br'].forEach(c=>v.insertAdjacentHTML('beforeend',`<svg class="orn ${c}" aria-hidden="true"><use href="#orn"/></svg>`));
 }
 function answer(o,btn){
   const q=quiz.qs[quiz.i];const ok=o===q.ans;
   document.querySelectorAll('.opt').forEach(b=>{b.disabled=true;if(+b.dataset.o===q.ans)b.classList.add('correct')});
-  if(ok){combo++;quiz.right++;const pts=10+(combo-1)*2;quiz.points+=pts;score=quiz.points;bump(btn,'pop');}
-  else{combo=0;btn.classList.add('wrong');bump(btn,'shake');miss[q.ans]=(miss[q.ans]||0)+1;known.delete(q.ans);saveProgress()}
-  quiz.log.push({ok,q});
-  if(score>best){best=score;store.set('best',best)}
+  if(ok){combo++;quiz.right++;const pts=10+(combo-1)*2;quiz.points+=pts;score=quiz.points;bump(btn,'pop');sfx('ok');floatPts(btn,'+'+pts);if(combo>=5)award('combo5')}
+  else{combo=0;btn.classList.add('wrong');bump(btn,'shake');sfx('bad');miss[q.ans]=(miss[q.ans]||0)+1;known.delete(q.ans);saveProgress()}
+  quiz.log.push({ok,q});if(score>best){best=score;store.set('best',best)}
   renderStats();bump($('#sScore').parentElement,ok?'pop':'shake');
   $('#qFb').innerHTML=`<div class="feedback ${ok?'ok':'no'}"><b>${ok?'✓ ถูกต้อง!':'✗ ยังไม่ถูก'}</b> ${esc(q.exp)}</div>
     <div class="btn-grid two"><span></span><button class="btn primary" id="qNext">${quiz.i<9?'ข้อต่อไป ▶':'ดูสรุปคะแนน'}</button></div>`;
-  $('#qCombo').textContent=combo>=2?'🔥 คอมโบ x'+combo:'';
+  $('#qCombo').textContent=combo>=2?'คอมโบ ×'+combo:'';
   $('#qNext').onclick=()=>{quiz.i++;quiz.i<10?renderQ():renderResult()};
   $('#qNext').focus({preventScroll:true});
 }
 function renderResult(){
-  const r=quiz.right;const msg=r===10?'เก่งมาก! ครบทุกข้อ 👑':r>=7?'ดีมาก ใกล้จำได้ครบแล้ว':r>=4?'กำลังไปได้ดี ลองทวนแฟลชการ์ดอีกนิด':'ลองเปิดแฟลชการ์ดทวนก่อน แล้วกลับมาใหม่';
+  const r=quiz.right;const stars=r===10?3:r>=8?2:r>=5?1:0;
+  const msg=r===10?'เก่งมาก! ครบทุกข้อ':r>=8?'ดีมาก ใกล้จำได้ครบแล้ว':r>=5?'กำลังไปได้ดี ลองทวนแฟลชการ์ดอีกนิด':'ลองเปิดแฟลชการ์ดทวนก่อน แล้วกลับมาใหม่';
   $('#view-quiz').innerHTML=`<h2>สรุปคะแนน</h2><div class="result pop">
+    <div class="stars">${[0,1,2].map(i=>`<svg class="${i<stars?'on':'off'}"><use href="#i-star"/></svg>`).join('')}</div>
     <div class="score">${r}/10</div><div>คะแนน <b>${quiz.points}</b> · สูงสุด <b>${best}</b></div><div>${msg}</div>
-    <div class="review">${quiz.log.map((l,i)=>`<div>${l.ok?'✅':'❌'} ${i+1}. ${esc(l.q.exp)}</div>`).join('')}</div>
+    <div class="review">${quiz.log.map((l,i)=>`<div>${l.ok?'✓':'✗'} ${i+1}. ${esc(l.q.exp)}</div>`).join('')}</div>
     <div class="btn-grid two" style="width:100%"><button class="btn" data-goto="flash">ทวนแฟลชการ์ด</button><button class="btn primary" id="qAgain">เล่นอีกชุด</button></div></div>`;
+  ['tl','tr','bl','br'].forEach(c=>$('#view-quiz').insertAdjacentHTML('beforeend',`<svg class="orn ${c}" aria-hidden="true"><use href="#orn"/></svg>`));
   $('#qAgain').onclick=startQuiz;
+  if(stars>=2){sfx('win');confetti(stars===3?150:70)}
+  award('first');if(r===10)award('perfect');
 }
 
 /* ---------- sort ---------- */
 let sortSet=[];
 function newSort(){
   sortSet=shuffle(KINGS).slice(0,5).map(k=>k.order);
-  let disp=shuffle(sortSet);let g=0;while(disp.join()===[...sortSet].sort((a,b)=>a-b).join()&&g++<5)disp=shuffle(sortSet);
-  $('#sortList').innerHTML=disp.map(o=>{const k=byOrder(o);return `<li class="sort-item" data-o="${o}"><span class="grip" aria-hidden="true">⠿</span><span class="mini portrait" style="border-width:2px">${avatarSvg({...k,order:'?'})}</span><span class="nm">${esc(k.name)}${k.altName&&!k.altName.includes('ครั้ง')?`<small>${esc(k.altName)}</small>`:''}</span><span class="ans"></span><span class="arrows"><button aria-label="เลื่อนขึ้น" data-mv="-1">▲</button><button aria-label="เลื่อนลง" data-mv="1">▼</button></span></li>`}).join('');
+  let disp=shuffle(sortSet),g=0;const sorted=[...sortSet].sort((a,b)=>a-b).join();while(disp.join()===sorted&&g++<5)disp=shuffle(sortSet);
+  $('#sortList').innerHTML=disp.map(o=>{const k=byOrder(o);return `<li class="sort-item" data-o="${o}"><span class="grip" aria-hidden="true">⠿</span>${mini(k,{num:false})}<span class="nm">${esc(k.name)}${k.altName&&!k.altName.includes('ครั้ง')?`<small>${esc(k.altName)}</small>`:''}</span><span class="ans"></span><span class="arrows"><button aria-label="เลื่อนขึ้น" data-mv="-1">▲</button><button aria-label="เลื่อนลง" data-mv="1">▼</button></span></li>`}).join('');
   $('#sortFb').hidden=true;
 }
 $('#sortList').addEventListener('click',e=>{
   const b=e.target.closest('[data-mv]');if(!b)return;const li=b.closest('li');
   if(b.dataset.mv==='-1'&&li.previousElementSibling)li.parentNode.insertBefore(li,li.previousElementSibling);
   if(b.dataset.mv==='1'&&li.nextElementSibling)li.parentNode.insertBefore(li.nextElementSibling,li);
-  clearMarks();
+  clearMarks();sfx('tick');
 });
 let drag=null;
 $('#sortList').addEventListener('pointerdown',e=>{
@@ -572,20 +738,19 @@ $('#sortList').addEventListener('pointerdown',e=>{
   drag=li;li.classList.add('dragging');li.setPointerCapture(e.pointerId);clearMarks();
 });
 $('#sortList').addEventListener('pointermove',e=>{
-  if(!drag)return;e.preventDefault();
-  const items=[...$('#sortList').children].filter(x=>x!==drag);
+  if(!drag)return;e.preventDefault();const items=[...$('#sortList').children].filter(x=>x!==drag);
   let before=null;for(const it of items){const r=it.getBoundingClientRect();if(e.clientY<r.top+r.height/2){before=it;break}}
-  if(before!==drag.nextElementSibling)$('#sortList').insertBefore(drag,before);
+  if(before!==drag.nextElementSibling){$('#sortList').insertBefore(drag,before);sfx('tick')}
 });
 const endDrag=()=>{if(drag){drag.classList.remove('dragging');drag=null}};
 $('#sortList').addEventListener('pointerup',endDrag);$('#sortList').addEventListener('pointercancel',endDrag);
 function clearMarks(){document.querySelectorAll('.sort-item').forEach(li=>{li.classList.remove('right','off');li.querySelector('.ans').textContent=''})}
 $('#sortCheck').onclick=()=>{
   const cur=[...$('#sortList').children];const correct=[...sortSet].sort((a,b)=>a-b);let n=0;
-  cur.forEach((li,i)=>{const o=+li.dataset.o;const ok=o===correct[i];if(ok)n++;li.classList.toggle('right',ok);li.classList.toggle('off',!ok);li.querySelector('.ans').textContent='#'+o;li.querySelector('svg text').textContent=o});
-  const fb=$('#sortFb');fb.hidden=false;
-  const all=n===5;
-  if(all){combo++;score+=20+combo*2}else combo=0;
+  cur.forEach((li,i)=>{const o=+li.dataset.o;const ok=o===correct[i];if(ok)n++;li.classList.toggle('right',ok);li.classList.toggle('off',!ok);li.querySelector('.ans').textContent='#'+o});
+  const fb=$('#sortFb');fb.hidden=false;const all=n===5;
+  if(all){combo++;const pts=20+combo*2;score+=pts;sortWins++;store.set('sortWins',sortWins);sfx('win');confetti(80);floatPts($('#sortCheck'),'+'+pts);if(sortWins>=3)award('sort3')}
+  else{combo=0;sfx('bad')}
   if(score>best){best=score;store.set('best',best)}renderStats();
   fb.className='feedback '+(all?'ok':'no');
   fb.innerHTML=all?`<b>✓ เรียงถูกทั้งหมด!</b> +${20+combo*2} คะแนน`:`<b>ถูก ${n}/5 ตำแหน่ง</b> ลำดับที่ถูกคือ ${correct.map(o=>`${o}. ${esc(shortName(byOrder(o)))}`).join(' → ')}`;
@@ -598,11 +763,11 @@ function renderTimeline(){
   const groups=[];KINGS.forEach(k=>{const g=groups[groups.length-1];if(g&&g.d===k.dynasty)g.ks.push(k);else groups.push({d:k.dynasty,ks:[k]})});
   $('#tl').innerHTML=groups.map(g=>`<div class="tl-dyn" style="--c:var(${DYN[g.d].v})"><h3>ราชวงศ์${g.d} <small>ลำดับ ${g.ks[0].order}${g.ks.length>1?'–'+g.ks[g.ks.length-1].order:''}</small></h3><div class="tl-items">
     ${g.ks.map(k=>`<button class="tl-item" data-k="${k.order}">${mini(k)}<span class="nm">${esc(k.name)}${k.altName?` <span class="alt">(${esc(k.altName)})</span>`:''}<small>พ.ศ. ${esc(k.reignYears)}</small></span>${known.has(k.order)?'<span class="known" title="จำได้แล้ว">✓</span>':''}</button>`).join('')}
-    ${g.ks.some(k=>k.order===14)?`<button class="tl-item special" data-k="special"><span class="mini portrait" style="border-width:2px;display:grid;place-items:center;font-size:1.2rem">⭐</span><span class="nm">${SPECIAL.name} <span class="alt">(ไม่นับใน 33)</span><small>พ.ศ. ${SPECIAL.reignYears} · คั่นระหว่าง 14 กับ 15</small></span></button>`:''}
+    ${g.ks.some(k=>k.order===14)?`<button class="tl-item special" data-k="special"><span class="portrait mini" style="display:grid;place-items:center;color:var(--gold)"><svg viewBox="0 0 24 24" style="width:24px;height:24px"><use href="#i-star"/></svg></span><span class="nm">${SPECIAL.name} <span class="alt">(ไม่นับใน 33)</span><small>พ.ศ. ${SPECIAL.reignYears} · คั่นระหว่าง 14 กับ 15</small></span></button>`:''}
   </div></div>`).join('');
 }
 $('#tl').addEventListener('click',e=>{const b=e.target.closest('[data-k]');if(!b)return;
-  if(b.dataset.k==='special'){$('#dlgBody').innerHTML=`<h3 style="font-family:var(--font-display);color:var(--red);margin:0">⭐ ${SPECIAL.name}</h3><div class="alt">${SPECIAL.altName}</div><dl class="facts"><div><dt>ครองราชย์ (พ.ศ.)</dt><dd>${SPECIAL.reignYears}</dd></div><div><dt>เหตุการณ์</dt><dd>${esc(SPECIAL.keyEvent)}</dd></div></dl><div class="memo" style="margin-top:8px">💡 ${esc(SPECIAL.funFact)}</div>`}
+  if(b.dataset.k==='special')$('#dlgBody').innerHTML=`<h3 class="dt">${SPECIAL.name}</h3><div class="alt">${SPECIAL.altName}</div><dl class="facts"><div><dt>ครองราชย์ (พ.ศ.)</dt><dd>${SPECIAL.reignYears}</dd></div><div><dt>เหตุการณ์</dt><dd>${esc(SPECIAL.keyEvent)}</dd></div></dl><div class="memo" style="margin-top:8px">${esc(SPECIAL.funFact)}</div>`;
   else $('#dlgBody').innerHTML=details(byOrder(+b.dataset.k));
   $('#dlg').showModal()});
 $('#dlgClose').onclick=()=>$('#dlg').close();
@@ -615,16 +780,14 @@ function setMode(m){
   document.querySelectorAll('nav.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.mode===m));
   ['flash','quiz','sort','timeline'].forEach(x=>$('#view-'+x).hidden=x!==m);
   if(m==='quiz'&&(!quiz||quiz.i>=10))startQuiz();
-  if(m==='quiz'&&quiz&&quiz.i<10&&!$('#view-quiz').innerHTML)renderQ();
   if(m==='timeline')renderTimeline();
   if(m==='flash')renderCard();
 }
-document.addEventListener('click',e=>{const t=e.target.closest('[data-mode],[data-goto]');if(t)setMode(t.dataset.mode||t.dataset.goto)});
+document.addEventListener('click',e=>{const t=e.target.closest('[data-mode],[data-goto]');if(t){setMode(t.dataset.mode||t.dataset.goto);sfx('tick')}});
 function refreshAll(){if(mode==='flash')renderCard($('#card').classList.contains('flipped'));if(mode==='timeline')renderTimeline();
-  if(mode==='quiz'&&quiz&&quiz.i<10&&!document.querySelector('.opt:disabled'))renderQ();
   if($('#dlg').open){const o=$('#dlgBody').querySelector('[data-edit]');if(o)$('#dlgBody').innerHTML=details(byOrder(+o.dataset.edit))}}
 
-buildDeck();newSort();renderStats();setMode(store.get('mode','flash'));
+renderSoundBtn();buildDeck();newSort();renderStats();setMode(store.get('mode','flash'));setTimeout(checkBadges,600);
 </script>
 </body>
 </html>
