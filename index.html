@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="เกมช่วยจำพระมหากษัตริย์กรุงศรีอยุธยา 33 พระองค์: แฟลชการ์ด ควิซ เรียงลำดับ ไทม์ไลน์">
+<meta name="description" content="เกมช่วยจำพระมหากษัตริย์กรุงศรีอยุธยา 33 พระองค์: แฟลชการ์ด ควิซ จับคู่ เรียงลำดับ ไทม์ไลน์">
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
 <title>จำ 33 กษัตริย์อยุธยา</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -58,7 +58,7 @@ header .wrap{padding-block:10px 8px;display:grid;gap:6px}
 .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#d9a440,#ffe08a);transition:width .5s}
 
 /* tabs */
-nav.tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-block:14px}
+nav.tabs{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-block:14px}
 nav.tabs button{border:2px solid var(--line);background:var(--paper);border-radius:12px;padding:8px 2px 6px;font-weight:700;font-size:.92rem;min-height:62px;line-height:1.2;display:grid;justify-items:center;gap:3px;color:var(--muted);transition:transform .15s}
 nav.tabs button svg{width:26px;height:26px}
 nav.tabs button[aria-selected="true"]{background:linear-gradient(180deg,var(--red),#6d1414);border-color:var(--gold);color:#fff3d2;box-shadow:0 3px 0 #3f0a0a}
@@ -172,6 +172,29 @@ dl.facts dd{margin:0;min-width:0}
 .tl-item.special{border-style:dashed;border-color:var(--gold)}
 .tl-item .known{color:var(--ok);font-weight:700}
 
+/* match (memory) */
+.m-meta{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:.9rem;color:var(--muted);font-variant-numeric:tabular-nums;margin-top:8px}
+.mgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+@media (min-width:560px){.mgrid{grid-template-columns:repeat(4,1fr)}}
+.mcard{aspect-ratio:3/4;max-width:100%;border:none;background:none;padding:0;perspective:800px;position:relative;min-width:0}
+.mc-in{position:absolute;inset:0;transition:transform .45s cubic-bezier(.3,.7,.3,1);transform-style:preserve-3d}
+.mcard.open .mc-in,.mcard.done .mc-in{transform:rotateY(180deg)}
+.mc-f,.mc-b{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:12px;border:2px solid var(--gold);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:6px;text-align:center;overflow:hidden}
+.mc-f{background-color:#7a1414;box-shadow:inset 0 0 0 4px #7a1414,inset 0 0 0 5px #d8a943;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M12 4Q14.5 12 12 20Q9.5 12 12 4Z M4 12Q12 9.5 20 12Q12 14.5 4 12Z' fill='%23d8a943' fill-opacity='.35'/%3E%3C/svg%3E")}
+.mc-orn{width:42%;height:auto;aspect-ratio:1;color:#e9c46a}
+.mc-b{transform:rotateY(180deg);background:var(--paper-2);color:var(--ink)}
+.mc-b.is-name{background:color-mix(in srgb,var(--gold) 14%,var(--paper))}
+.mc-name{font-weight:700;font-size:.86rem;line-height:1.3}
+.mc-name small{display:block;font-weight:400;color:var(--muted);font-size:.74rem}
+.mc-emb{width:78%;height:auto;aspect-ratio:1;border:2px solid var(--gold)}
+.mc-ord{font-family:var(--font-display);font-size:2.6rem;line-height:1;color:var(--red)}
+.mc-ev{font-size:.74rem;line-height:1.35;display:-webkit-box;-webkit-line-clamp:7;-webkit-box-orient:vertical;overflow:hidden}
+.mcard.done .mc-b{border-color:var(--ok);box-shadow:0 0 0 2px var(--ok)}
+.mcard.done{opacity:.8}
+.feedback .stars svg{width:34px;height:34px}
+@media (prefers-reduced-motion: reduce){.mc-in{transition:none}}
+
 /* badges */
 .badges{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin-top:8px}
 .badge{border:2px solid var(--line);border-radius:12px;padding:10px 8px;text-align:center;display:grid;justify-items:center;gap:4px;font-size:.85rem;line-height:1.35}
@@ -205,7 +228,7 @@ dialog h3.dt{font-family:var(--font-display);color:var(--red);margin:0;font-size
 .shake{animation:shake .42s ease}
 .glow{animation:glow 1s ease 2}
 @media (prefers-reduced-motion: reduce){.card{transition:none}.pop,.shake,.glow,.float-pts{animation:none}.bar i,.qbar i,.toast{transition:none}}
-@media (max-width:420px){.brand h1{font-size:1.25rem}nav.tabs button{font-size:.8rem}.card{min-height:490px}.portrait.big{width:170px;height:170px}dl.facts div{grid-template-columns:1fr;gap:0}}
+@media (max-width:420px){.brand h1{font-size:1.25rem}nav.tabs{gap:4px}nav.tabs button{font-size:.76rem}nav.tabs button svg{width:22px;height:22px}.card{min-height:490px}.portrait.big{width:170px;height:170px}dl.facts div{grid-template-columns:1fr;gap:0}}
 </style>
 </head>
 <body>
@@ -214,6 +237,7 @@ dialog h3.dt{font-family:var(--font-display);color:var(--red);margin:0;font-size
   <symbol id="orn" viewBox="0 0 26 26"><path d="M13 1Q17 9 13 25Q9 9 13 1Z M1 13Q9 9 25 13Q9 17 1 13Z" fill="currentColor"/><circle cx="13" cy="13" r="4" fill="#8e1b1b" stroke="currentColor" stroke-width="1.5"/></symbol>
   <symbol id="i-card" viewBox="0 0 26 26"><rect x="5" y="3" width="16" height="20" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M13 8L15 12L13 16L11 12Z" fill="currentColor"/></symbol>
   <symbol id="i-quiz" viewBox="0 0 26 26"><circle cx="13" cy="13" r="10" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M10 10a3 3 0 1 1 4.5 2.6c-1 .6-1.5 1.2-1.5 2.4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="13" cy="18.5" r="1.4" fill="currentColor"/></symbol>
+  <symbol id="i-match" viewBox="0 0 26 26"><rect x="2.5" y="5" width="11" height="15" rx="2.5" fill="none" stroke="currentColor" stroke-width="2.2" transform="rotate(-10 8 12.5)"/><rect x="12.5" y="6" width="11" height="15" rx="2.5" fill="currentColor" transform="rotate(10 18 13.5)"/></symbol>
   <symbol id="i-sort" viewBox="0 0 26 26"><path d="M8 4V22M4 8L8 4L12 8M18 22V4M14 18L18 22L22 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
   <symbol id="i-scroll" viewBox="0 0 26 26"><path d="M6 4H20V20a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V18H16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><path d="M9 9H16M9 13H16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
   <symbol id="i-sound" viewBox="0 0 26 26"><path d="M4 10H8L14 5V21L8 16H4Z" fill="currentColor"/><path d="M17.5 9.5a5 5 0 0 1 0 7M20 7a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
@@ -244,9 +268,10 @@ dialog h3.dt{font-family:var(--font-display);color:var(--red);margin:0;font-size
 
 <main class="wrap">
   <nav class="tabs" role="tablist">
-    <button role="tab" data-mode="flash" aria-selected="true"><svg><use href="#i-card"/></svg>แฟลชการ์ด</button>
+    <button role="tab" data-mode="flash" aria-selected="true"><svg><use href="#i-card"/></svg>การ์ด</button>
     <button role="tab" data-mode="quiz" aria-selected="false"><svg><use href="#i-quiz"/></svg>ควิซ</button>
-    <button role="tab" data-mode="sort" aria-selected="false"><svg><use href="#i-sort"/></svg>เรียงลำดับ</button>
+    <button role="tab" data-mode="match" aria-selected="false"><svg><use href="#i-match"/></svg>จับคู่</button>
+    <button role="tab" data-mode="sort" aria-selected="false"><svg><use href="#i-sort"/></svg>เรียง</button>
     <button role="tab" data-mode="timeline" aria-selected="false"><svg><use href="#i-scroll"/></svg>ไทม์ไลน์</button>
   </nav>
 
@@ -273,6 +298,24 @@ dialog h3.dt{font-family:var(--font-display);color:var(--red);margin:0;font-size
   </section>
 
   <section class="panel" id="view-quiz" hidden></section>
+
+  <section class="panel" id="view-match" hidden>
+    <h2>จับคู่การ์ด</h2>
+    <p class="hint">เปิดการ์ดทีละ 2 ใบ หาคู่ให้ครบ ยิ่งเปิดน้อยครั้งยิ่งได้ดาวมาก</p>
+    <div class="row">
+      <label for="mType" class="hint" style="margin:0">จับคู่</label>
+      <select id="mType">
+        <option value="emblem">ภาพช่วยจำ ↔ พระนาม</option>
+        <option value="order">ลำดับที่ ↔ พระนาม</option>
+        <option value="event">เหตุการณ์ ↔ พระนาม</option>
+      </select>
+      <select id="mDyn" aria-label="ราชวงศ์"></select>
+    </div>
+    <div class="m-meta" id="mMeta"></div>
+    <div class="mgrid" id="mGrid"></div>
+    <div class="feedback" id="mFb" hidden></div>
+    <div class="btn-grid two"><span></span><button class="btn primary" id="mNew">สับการ์ดใหม่</button></div>
+  </section>
 
   <section class="panel" id="view-sort" hidden>
     <h2>เรียงลำดับการครองราชย์</h2>
@@ -528,6 +571,7 @@ const BADGES=[
  {id:'combo5',name:'คอมโบ 5',desc:'ตอบถูกติดกัน 5 ข้อ',ic:'flame'},
  {id:'perfect',name:'เต็มสิบ',desc:'ควิซได้ 10/10',ic:'gem'},
  {id:'sort3',name:'นักลำดับเหตุการณ์',desc:'เรียงถูกทั้งชุด 3 ครั้ง',ic:'pillars'},
+ {id:'match',name:'ตาไว',desc:'จับคู่ครบ 6 คู่ได้ 3 ดาว',ic:'eye'},
  {id:'streak3',name:'ขยันสามวัน',desc:'เข้ามาเรียน 3 วันติด',ic:'sunset'},
  ...Object.keys(DYN).map((d,i)=>({id:'dyn'+i,name:'รู้แจ้ง'+d,desc:`จำราชวงศ์${d}ได้ครบ`,ic:['city','crack','swords','prasat','flame'][i],dyn:d})),
  {id:'all',name:'ครบ 33 พระองค์',desc:'จำได้ครบทุกพระองค์',ic:'wheel'}
@@ -718,6 +762,65 @@ function renderResult(){
   award('first');if(r===10)award('perfect');
 }
 
+/* ---------- match (memory game) ---------- */
+let mt=null;
+const mType=$('#mType'),mDyn=$('#mDyn');
+mDyn.innerHTML='<option value="">ทุกราชวงศ์</option>'+Object.keys(DYN).map(d=>`<option value="${d}">${d}</option>`).join('');
+mType.value=store.get('mType','emblem');mDyn.value=store.get('mDyn','');
+const shortEvent=k=>k.keyEvent.split(' · ').filter(s=>!s.includes(P)).sort((a,b)=>a.length-b.length)[0];
+function newMatch(){
+  if(mt)clearInterval(mt.timer);
+  const type=mType.value,d=mDyn.value;
+  let pool=KINGS.filter(k=>!d||k.dynasty===d);if(type==='event')pool=pool.filter(k=>shortEvent(k));
+  const picks=shuffle(pool).slice(0,Math.min(6,pool.length));
+  const cards=shuffle(picks.flatMap(k=>[{o:k.order,kind:'a'},{o:k.order,kind:'n'}]));
+  mt={type,cards,open:[],done:0,n:picks.length,moves:0,t0:0,end:0,timer:null,lock:false};
+  $('#mGrid').innerHTML=cards.map((c,i)=>{const k=byOrder(c.o);let face;
+    if(c.kind==='n')face=`<span class="mc-name">${esc(shortName(k))}${k.altName&&!k.altName.includes('ครั้ง')?`<small>${esc(k.altName)}</small>`:''}</span>`;
+    else if(type==='emblem')face=`<span class="portrait mc-emb">${emblemSvg(k,{num:false})}</span>`;
+    else if(type==='order')face=`<small class="alt">ลำดับที่</small><span class="mc-ord">${k.order}</span>`;
+    else face=`<span class="mc-ev">${esc(shortEvent(k))}</span>`;
+    return `<button class="mcard" data-i="${i}" aria-label="การ์ดคว่ำใบที่ ${i+1}"><span class="mc-in"><span class="mc-f"><svg class="mc-orn" viewBox="0 0 26 26"><use href="#orn"/></svg></span><span class="mc-b${c.kind==='n'?' is-name':''}">${face}</span></span></button>`}).join('');
+  $('#mFb').hidden=true;renderMatchMeta();
+}
+function renderMatchMeta(){
+  const s=mt.t0?Math.floor(((mt.end||Date.now())-mt.t0)/1000):0;
+  $('#mMeta').innerHTML=`<span>คู่ ${mt.done}/${mt.n}</span><span>เปิด ${mt.moves} ครั้ง</span><span>เวลา ${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}</span>`;
+}
+$('#mGrid').addEventListener('click',e=>{
+  const b=e.target.closest('.mcard');if(!b||!mt||mt.lock)return;
+  if(b.classList.contains('open')||b.classList.contains('done'))return;
+  const i=+b.dataset.i;
+  if(!mt.t0){mt.t0=Date.now();mt.timer=setInterval(renderMatchMeta,1000)}
+  b.classList.add('open');b.setAttribute('aria-label','เปิดอยู่');sfx('flip');mt.open.push(i);
+  if(mt.open.length<2)return;
+  mt.moves++;const pair=mt.open.map(j=>mt.cards[j]);const els=mt.open.map(j=>$('#mGrid').children[j]);mt.open=[];
+  if(pair[0].o===pair[1].o){
+    els.forEach(x=>{x.classList.add('done');x.setAttribute('aria-label','จับคู่แล้ว');bump(x,'pop')});
+    mt.done++;combo++;const pts=10+(combo-1)*2;score+=pts;floatPts(els[1],'+'+pts);sfx('ok');if(combo>=5)award('combo5');
+    const k=byOrder(pair[0].o);$('#mFb').hidden=false;$('#mFb').className='feedback ok';
+    $('#mFb').innerHTML=`<b>✓ คู่ถูก!</b> ${esc(label(k))} · ลำดับ ${k.order} · ${esc(k.hint)}`;
+    if(mt.done===mt.n)matchWin();
+  }else{
+    combo=0;mt.lock=true;els.forEach(x=>bump(x,'shake'));sfx('bad');
+    setTimeout(()=>{els.forEach(x=>{x.classList.remove('open');x.setAttribute('aria-label','การ์ดคว่ำ')});mt.lock=false},850);
+  }
+  if(score>best){best=score;store.set('best',best)}renderStats();renderMatchMeta();
+});
+function matchWin(){
+  clearInterval(mt.timer);mt.end=Date.now();renderMatchMeta();
+  const stars=mt.moves<=mt.n+2?3:mt.moves<=mt.n*2?2:1;const secs=Math.round((mt.end-mt.t0)/1000);
+  const key='mBest.'+mt.type,prev=store.get(key,null),full=mt.n>=6;
+  const better=full&&(!prev||mt.moves<prev.moves||(mt.moves===prev.moves&&secs<prev.secs));if(better)store.set(key,{moves:mt.moves,secs});
+  $('#mFb').hidden=false;$('#mFb').className='feedback ok';
+  $('#mFb').innerHTML=`<div class="stars" style="justify-content:center">${[0,1,2].map(i=>`<svg class="${i<stars?'on':'off'}"><use href="#i-star"/></svg>`).join('')}</div>
+    <b>จับคู่ครบ ${mt.n} คู่!</b> เปิด ${mt.moves} ครั้ง ใช้เวลา ${secs} วินาที${better?' · สถิติใหม่!':prev&&full?` · สถิติเดิม ${prev.moves} ครั้ง`:''}`;
+  sfx('win');confetti(stars===3?140:70);if(stars===3&&full)award('match');
+}
+mType.onchange=()=>{store.set('mType',mType.value);newMatch()};
+mDyn.onchange=()=>{store.set('mDyn',mDyn.value);newMatch()};
+$('#mNew').onclick=newMatch;
+
 /* ---------- sort ---------- */
 let sortSet=[];
 function newSort(){
@@ -778,8 +881,9 @@ let mode='flash';
 function setMode(m){
   mode=m;store.set('mode',m);
   document.querySelectorAll('nav.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.mode===m));
-  ['flash','quiz','sort','timeline'].forEach(x=>$('#view-'+x).hidden=x!==m);
+  ['flash','quiz','match','sort','timeline'].forEach(x=>$('#view-'+x).hidden=x!==m);
   if(m==='quiz'&&(!quiz||quiz.i>=10))startQuiz();
+  if(m==='match'&&!mt)newMatch();
   if(m==='timeline')renderTimeline();
   if(m==='flash')renderCard();
 }
