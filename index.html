@@ -193,6 +193,19 @@ dl.facts dd{margin:0;min-width:0}
 .mcard.done .mc-b{border-color:var(--ok);box-shadow:0 0 0 2px var(--ok)}
 .mcard.done{opacity:.8}
 .feedback .stars svg{width:34px;height:34px}
+/* face-up: two columns, left = clue, right = name */
+.mgrid.faceup{grid-template-columns:1fr 1fr}
+.mgrid.faceup .mcard{aspect-ratio:auto;perspective:none}
+.mgrid.faceup .mc-in{position:relative;inset:auto;transform:none!important;height:100%;display:block}
+.mgrid.faceup .mc-f{display:none}
+.mgrid.faceup .mc-b{position:relative;inset:auto;transform:none;min-height:86px;height:100%;padding:8px;box-shadow:0 3px 0 var(--gold-soft);transition:transform .1s}
+.mgrid.faceup .mc-emb{width:66px}
+.mgrid.faceup .mc-ord{font-size:2.2rem}
+.mgrid.faceup .mc-ev{font-size:.8rem;-webkit-line-clamp:6}
+.mgrid.faceup .mcard:not(.done):active .mc-b{transform:translateY(2px)}
+.mcard.sel .mc-b{border-color:var(--red);box-shadow:0 0 0 3px var(--red);background:color-mix(in srgb,var(--red) 10%,var(--paper))}
+.mgrid.faceup .mcard.done{opacity:.42}
+.mgrid.faceup .mcard.done .mc-b{box-shadow:none}
 @media (prefers-reduced-motion: reduce){.mc-in{transition:none}}
 
 /* badges */
@@ -301,8 +314,12 @@ dialog h3.dt{font-family:var(--font-display);color:var(--red);margin:0;font-size
 
   <section class="panel" id="view-match" hidden>
     <h2>จับคู่การ์ด</h2>
-    <p class="hint">เปิดการ์ดทีละ 2 ใบ หาคู่ให้ครบ ยิ่งเปิดน้อยครั้งยิ่งได้ดาวมาก</p>
+    <p class="hint" id="mHint"></p>
     <div class="row">
+      <select id="mStyle" aria-label="รูปแบบการ์ด">
+        <option value="open">เปิดหน้า (เห็นทุกใบ)</option>
+        <option value="down">คว่ำ (ฝึกความจำ)</option>
+      </select>
       <label for="mType" class="hint" style="margin:0">จับคู่</label>
       <select id="mType">
         <option value="emblem">ภาพช่วยจำ ↔ พระนาม</option>
@@ -764,7 +781,9 @@ function renderResult(){
 
 /* ---------- match (memory game) ---------- */
 let mt=null;
-const mType=$('#mType'),mDyn=$('#mDyn');
+const mType=$('#mType'),mDyn=$('#mDyn'),mStyle=$('#mStyle');
+mStyle.value=store.get('mStyle','open');
+mStyle.onchange=()=>{store.set('mStyle',mStyle.value);newMatch()};
 mDyn.innerHTML='<option value="">ทุกราชวงศ์</option>'+Object.keys(DYN).map(d=>`<option value="${d}">${d}</option>`).join('');
 mType.value=store.get('mType','emblem');mDyn.value=store.get('mDyn','');
 const shortEvent=k=>k.keyEvent.split(' · ').filter(s=>!s.includes(P)).sort((a,b)=>a.length-b.length)[0];
@@ -773,28 +792,44 @@ function newMatch(){
   const type=mType.value,d=mDyn.value;
   let pool=KINGS.filter(k=>!d||k.dynasty===d);if(type==='event')pool=pool.filter(k=>shortEvent(k));
   const picks=shuffle(pool).slice(0,Math.min(6,pool.length));
-  const cards=shuffle(picks.flatMap(k=>[{o:k.order,kind:'a'},{o:k.order,kind:'n'}]));
-  mt={type,cards,open:[],done:0,n:picks.length,moves:0,t0:0,end:0,timer:null,lock:false};
+  const style=mStyle.value;let cards;
+  if(style==='open'){const as=shuffle(picks),ns=shuffle(picks);cards=as.flatMap((k,i)=>[{o:k.order,kind:'a'},{o:ns[i].order,kind:'n'}])}
+  else cards=shuffle(picks.flatMap(k=>[{o:k.order,kind:'a'},{o:k.order,kind:'n'}]));
+  $('#mGrid').classList.toggle('faceup',style==='open');
+  $('#mHint').textContent=style==='open'?'แตะการ์ดฝั่งซ้าย แล้วแตะพระนามที่คู่กันฝั่งขวา ยิ่งผิดน้อยยิ่งได้ดาวมาก':'เปิดการ์ดทีละ 2 ใบ หาคู่ให้ครบ ยิ่งเปิดน้อยครั้งยิ่งได้ดาวมาก';
+  mt={type,style,cards,open:[],sel:null,done:0,n:picks.length,moves:0,miss:0,t0:0,end:0,timer:null,lock:false};
   $('#mGrid').innerHTML=cards.map((c,i)=>{const k=byOrder(c.o);let face;
     if(c.kind==='n')face=`<span class="mc-name">${esc(shortName(k))}${k.altName&&!k.altName.includes('ครั้ง')?`<small>${esc(k.altName)}</small>`:''}</span>`;
     else if(type==='emblem')face=`<span class="portrait mc-emb">${emblemSvg(k,{num:false})}</span>`;
     else if(type==='order')face=`<small class="alt">ลำดับที่</small><span class="mc-ord">${k.order}</span>`;
     else face=`<span class="mc-ev">${esc(shortEvent(k))}</span>`;
-    return `<button class="mcard" data-i="${i}" aria-label="การ์ดคว่ำใบที่ ${i+1}"><span class="mc-in"><span class="mc-f"><svg class="mc-orn" viewBox="0 0 26 26"><use href="#orn"/></svg></span><span class="mc-b${c.kind==='n'?' is-name':''}">${face}</span></span></button>`}).join('');
+    return `<button class="mcard" data-i="${i}"${style==='open'?'':` aria-label="การ์ดคว่ำใบที่ ${i+1}"`}><span class="mc-in"><span class="mc-f"><svg class="mc-orn" viewBox="0 0 26 26"><use href="#orn"/></svg></span><span class="mc-b${c.kind==='n'?' is-name':''}">${face}</span></span></button>`}).join('');
   $('#mFb').hidden=true;renderMatchMeta();
 }
 function renderMatchMeta(){
   const s=mt.t0?Math.floor(((mt.end||Date.now())-mt.t0)/1000):0;
-  $('#mMeta').innerHTML=`<span>คู่ ${mt.done}/${mt.n}</span><span>เปิด ${mt.moves} ครั้ง</span><span>เวลา ${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}</span>`;
+  $('#mMeta').innerHTML=`<span>คู่ ${mt.done}/${mt.n}</span><span>${mt.style==='open'?`ผิด ${mt.miss} ครั้ง`:`เปิด ${mt.moves} ครั้ง`}</span><span>เวลา ${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}</span>`;
 }
 $('#mGrid').addEventListener('click',e=>{
   const b=e.target.closest('.mcard');if(!b||!mt||mt.lock)return;
   if(b.classList.contains('open')||b.classList.contains('done'))return;
   const i=+b.dataset.i;
   if(!mt.t0){mt.t0=Date.now();mt.timer=setInterval(renderMatchMeta,1000)}
-  b.classList.add('open');b.setAttribute('aria-label','เปิดอยู่');sfx('flip');mt.open.push(i);
-  if(mt.open.length<2)return;
-  mt.moves++;const pair=mt.open.map(j=>mt.cards[j]);const els=mt.open.map(j=>$('#mGrid').children[j]);mt.open=[];
+  let pair,els;
+  if(mt.style==='open'){
+    const g=$('#mGrid').children;
+    if(mt.sel===i){b.classList.remove('sel');mt.sel=null;return}
+    if(mt.sel===null||mt.cards[mt.sel].kind===mt.cards[i].kind){if(mt.sel!==null)g[mt.sel].classList.remove('sel');b.classList.add('sel');mt.sel=i;sfx('tick');return}
+    pair=[mt.cards[mt.sel],mt.cards[i]];els=[g[mt.sel],b];els[0].classList.remove('sel');mt.sel=null;mt.moves++;
+    if(pair[0].o!==pair[1].o){mt.miss++;combo=0;els.forEach(x=>bump(x,'shake'));sfx('bad');
+      $('#mFb').hidden=false;$('#mFb').className='feedback no';
+      const a=byOrder(pair.find(p=>p.kind==='a').o);$('#mFb').innerHTML=`<b>✗ ยังไม่ใช่คู่กัน</b> ลองหาพระนามที่ตรงกับ${mt.type==='order'?' ลำดับที่ '+a.order:mt.type==='emblem'?'ภาพนี้':'เหตุการณ์นี้'} อีกครั้ง`;
+      renderStats();renderMatchMeta();return}
+  }else{
+    b.classList.add('open');b.setAttribute('aria-label','เปิดอยู่');sfx('flip');mt.open.push(i);
+    if(mt.open.length<2)return;
+    mt.moves++;pair=mt.open.map(j=>mt.cards[j]);els=mt.open.map(j=>$('#mGrid').children[j]);mt.open=[];
+  }
   if(pair[0].o===pair[1].o){
     els.forEach(x=>{x.classList.add('done');x.setAttribute('aria-label','จับคู่แล้ว');bump(x,'pop')});
     mt.done++;combo++;const pts=10+(combo-1)*2;score+=pts;floatPts(els[1],'+'+pts);sfx('ok');if(combo>=5)award('combo5');
@@ -809,12 +844,13 @@ $('#mGrid').addEventListener('click',e=>{
 });
 function matchWin(){
   clearInterval(mt.timer);mt.end=Date.now();renderMatchMeta();
-  const stars=mt.moves<=mt.n+2?3:mt.moves<=mt.n*2?2:1;const secs=Math.round((mt.end-mt.t0)/1000);
-  const key='mBest.'+mt.type,prev=store.get(key,null),full=mt.n>=6;
-  const better=full&&(!prev||mt.moves<prev.moves||(mt.moves===prev.moves&&secs<prev.secs));if(better)store.set(key,{moves:mt.moves,secs});
+  const open=mt.style==='open',metric=open?mt.miss:mt.moves,unit=open?'ผิด':'เปิด';
+  const stars=open?(mt.miss===0?3:mt.miss<=2?2:1):(mt.moves<=mt.n+2?3:mt.moves<=mt.n*2?2:1);const secs=Math.round((mt.end-mt.t0)/1000);
+  const key='mBest.'+mt.style+'.'+mt.type,prev=store.get(key,null),full=mt.n>=6;
+  const better=full&&(!prev||metric<prev.moves||(metric===prev.moves&&secs<prev.secs));if(better)store.set(key,{moves:metric,secs});
   $('#mFb').hidden=false;$('#mFb').className='feedback ok';
   $('#mFb').innerHTML=`<div class="stars" style="justify-content:center">${[0,1,2].map(i=>`<svg class="${i<stars?'on':'off'}"><use href="#i-star"/></svg>`).join('')}</div>
-    <b>จับคู่ครบ ${mt.n} คู่!</b> เปิด ${mt.moves} ครั้ง ใช้เวลา ${secs} วินาที${better?' · สถิติใหม่!':prev&&full?` · สถิติเดิม ${prev.moves} ครั้ง`:''}`;
+    <b>จับคู่ครบ ${mt.n} คู่!</b> ${unit} ${metric} ครั้ง ใช้เวลา ${secs} วินาที${better?' · สถิติใหม่!':prev&&full?` · สถิติเดิม ${unit} ${prev.moves} ครั้ง ${prev.secs} วินาที`:''}`;
   sfx('win');confetti(stars===3?140:70);if(stars===3&&full)award('match');
 }
 mType.onchange=()=>{store.set('mType',mType.value);newMatch()};
