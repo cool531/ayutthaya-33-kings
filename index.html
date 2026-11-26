@@ -762,7 +762,7 @@ $('#sortNew').onclick=newSort;
 function renderTimeline(){
   const groups=[];KINGS.forEach(k=>{const g=groups[groups.length-1];if(g&&g.d===k.dynasty)g.ks.push(k);else groups.push({d:k.dynasty,ks:[k]})});
   $('#tl').innerHTML=groups.map(g=>`<div class="tl-dyn" style="--c:var(${DYN[g.d].v})"><h3>ราชวงศ์${g.d} <small>ลำดับ ${g.ks[0].order}${g.ks.length>1?'–'+g.ks[g.ks.length-1].order:''}</small></h3><div class="tl-items">
-    ${g.ks.map(k=>`<button class="tl-item" data-k="${k.order}">${mini(k)}<span class="nm">${esc(k.name)}${k.altName?` <span class="alt">(${esc(k.altName)})</span>`:''}<small>พ.ศ. ${esc(k.reignYears)}</small></span>${known.has(k.order)?'<span class="known" title="จำได้แล้ว">✓</span>':''}</button>`).join('')}
+    ${g.ks.map(k=>`<button class="tl-item" data-k="${k.order}">${mini(k,{num:false})}<span class="nm"><b style="color:var(--c)">${k.order}.</b> ${esc(k.name)}${k.altName?` <span class="alt">(${esc(k.altName)})</span>`:''}<small>พ.ศ. ${esc(k.reignYears)}</small></span>${known.has(k.order)?'<span class="known" title="จำได้แล้ว">✓</span>':''}</button>`).join('')}
     ${g.ks.some(k=>k.order===14)?`<button class="tl-item special" data-k="special"><span class="portrait mini" style="display:grid;place-items:center;color:var(--gold)"><svg viewBox="0 0 24 24" style="width:24px;height:24px"><use href="#i-star"/></svg></span><span class="nm">${SPECIAL.name} <span class="alt">(ไม่นับใน 33)</span><small>พ.ศ. ${SPECIAL.reignYears} · คั่นระหว่าง 14 กับ 15</small></span></button>`:''}
   </div></div>`).join('');
 }
