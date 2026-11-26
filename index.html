@@ -36,6 +36,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 button:focus-visible,input:focus-visible,select:focus-visible,.card:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
 .wrap{max-width:720px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 56px}
 svg{display:block}
+.nw{white-space:nowrap}
 
 /* header */
 header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;color:#f8e6b8;
@@ -625,6 +626,17 @@ function avatar(k,opt){
 window.KINGS=KINGS;
 const mini=(k,opt)=>`<span class="portrait mini">${avatar(k,opt)}</span>`;
 const dynTag=k=>`<span class="dyn-tag" style="background:${color(k)}">${esc(k.dynasty)}</span>`;
+/* พระนาม: ตัดบรรทัดได้เฉพาะระหว่างส่วนของชื่อ ไม่ตัดกลางคำ */
+const NM_PRE=['สมเด็จ','พระเจ้าอยู่หัว','พระที่นั่ง','เจ้าพระยา','พระเจ้า','เจ้าฟ้า','ขุนหลวง','พระองค์','พระยา','เดิมคือ','หน่อ','กลาโหม','พระ','เจ้า','ขุน','บรม','มหา','ศรี'];
+const NM_SUF=['มหาราช','อมรินทร์'];
+function nameParts(w){
+  const out=[],tail=[];let s=w,g=0;
+  const m=s.match(/ที่ \d+$/);if(m&&s.length>m[0].length){tail.push(m[0]);s=s.slice(0,-m[0].length)}
+  for(const sf of NM_SUF)if(s.endsWith(sf)&&s.length>sf.length+1){tail.unshift(sf);s=s.slice(0,-sf.length)}
+  while(s&&g++<6){const p=NM_PRE.find(p=>s.startsWith(p)&&s.length>p.length+1);if(!p)break;out.push(p);s=s.slice(p.length)}
+  if(s)out.push(s);return out.concat(tail);
+}
+const tn=s=>String(s).replace(/ที่ (\d+)/g,'ที่ $1').split(/( \/ | )/).map(w=>w===' / '||w===' '||!w?w:nameParts(w).map(t=>`<span class="nw">${esc(t)}</span>`).join('<wbr>')).join('');
 const fmt=s=>esc(s).replace(/\(รอตรวจสอบ\)/g,'<span class="pending">(รอตรวจสอบ)</span>').replace(/ · /g,'<br>• ');
 
 function renderStats(){
@@ -640,7 +652,7 @@ function saveProgress(){store.set('known',[...known]);store.set('miss',miss);ren
 function details(k,withEdit=true){
   const st=known.has(k.order)?'<span class="status-pill ok">จำได้แล้ว</span>':(miss[k.order]?`<span class="status-pill no">พลาด ×${miss[k.order]}</span>`:'');
   return `<div class="back-head"><span class="portrait">${avatar(k)}</span>
-     <div style="min-width:0"><div class="alt">ลำดับที่ ${k.order}${st}</div><h3>${esc(k.name)}</h3>${k.altName?`<div class="alt">${esc(k.altName)}</div>`:''}</div></div>
+     <div style="min-width:0"><div class="alt">ลำดับที่ ${k.order}${st}</div><h3>${tn(k.name)}</h3>${k.altName?`<div class="alt">${tn(k.altName)}</div>`:''}</div></div>
    <div class="emblem-hint">${mini(k,{num:false})}<span><b>ภาพช่วยจำ:</b> ${esc(k.hint)}</span></div>
    <dl class="facts">
      <div><dt>ราชวงศ์</dt><dd>${dynTag(k)}</dd></div>
@@ -747,7 +759,7 @@ function renderQ(){
     <div class="q-text">${esc(q.q)}</div>
     ${q.emblem?`<span class="portrait q-emblem">${emblemSvg(q.emblem,{num:false})}</span>`:''}
     ${q.ev?`<div class="q-event">“${esc(q.ev)}”</div>`:''}
-    <div class="opts">${q.opts.map(o=>{const k=byOrder(o);return `<button class="opt" data-o="${o}">${q.emblem?'':mini(k,{num:false})}<span>${esc(k.name)}${k.altName&&!k.altName.includes('ครั้ง')?`<br><small class="alt">${esc(k.altName)}</small>`:''}</span></button>`}).join('')}</div>
+    <div class="opts">${q.opts.map(o=>{const k=byOrder(o);return `<button class="opt" data-o="${o}">${q.emblem?'':mini(k,{num:false})}<span>${tn(k.name)}${k.altName&&!k.altName.includes('ครั้ง')?`<br><small class="alt">${tn(k.altName)}</small>`:''}</span></button>`}).join('')}</div>
     <div id="qFb"></div>`;
   v.querySelectorAll('.opt').forEach(b=>b.onclick=()=>answer(+b.dataset.o,b));
   v.querySelectorAll('.orn').length||['tl','tr','bl','br'].forEach(c=>v.insertAdjacentHTML('beforeend',`<svg class="orn ${c}" aria-hidden="true"><use href="#orn"/></svg>`));
@@ -799,7 +811,7 @@ function newMatch(){
   $('#mHint').textContent=style==='open'?'แตะการ์ดฝั่งซ้าย แล้วแตะพระนามที่คู่กันฝั่งขวา ยิ่งผิดน้อยยิ่งได้ดาวมาก':'เปิดการ์ดทีละ 2 ใบ หาคู่ให้ครบ ยิ่งเปิดน้อยครั้งยิ่งได้ดาวมาก';
   mt={type,style,cards,open:[],sel:null,done:0,n:picks.length,moves:0,miss:0,t0:0,end:0,timer:null,lock:false};
   $('#mGrid').innerHTML=cards.map((c,i)=>{const k=byOrder(c.o);let face;
-    if(c.kind==='n')face=`<span class="mc-name">${esc(shortName(k))}${k.altName&&!k.altName.includes('ครั้ง')?`<small>${esc(k.altName)}</small>`:''}</span>`;
+    if(c.kind==='n')face=`<span class="mc-name">${tn(shortName(k))}${k.altName&&!k.altName.includes('ครั้ง')?`<small>${tn(k.altName)}</small>`:''}</span>`;
     else if(type==='emblem')face=`<span class="portrait mc-emb">${emblemSvg(k,{num:false})}</span>`;
     else if(type==='order')face=`<small class="alt">ลำดับที่</small><span class="mc-ord">${k.order}</span>`;
     else face=`<span class="mc-ev">${esc(shortEvent(k))}</span>`;
@@ -862,7 +874,7 @@ let sortSet=[];
 function newSort(){
   sortSet=shuffle(KINGS).slice(0,5).map(k=>k.order);
   let disp=shuffle(sortSet),g=0;const sorted=[...sortSet].sort((a,b)=>a-b).join();while(disp.join()===sorted&&g++<5)disp=shuffle(sortSet);
-  $('#sortList').innerHTML=disp.map(o=>{const k=byOrder(o);return `<li class="sort-item" data-o="${o}"><span class="grip" aria-hidden="true">⠿</span>${mini(k,{num:false})}<span class="nm">${esc(k.name)}${k.altName&&!k.altName.includes('ครั้ง')?`<small>${esc(k.altName)}</small>`:''}</span><span class="ans"></span><span class="arrows"><button aria-label="เลื่อนขึ้น" data-mv="-1">▲</button><button aria-label="เลื่อนลง" data-mv="1">▼</button></span></li>`}).join('');
+  $('#sortList').innerHTML=disp.map(o=>{const k=byOrder(o);return `<li class="sort-item" data-o="${o}"><span class="grip" aria-hidden="true">⠿</span>${mini(k,{num:false})}<span class="nm">${tn(k.name)}${k.altName&&!k.altName.includes('ครั้ง')?`<small>${tn(k.altName)}</small>`:''}</span><span class="ans"></span><span class="arrows"><button aria-label="เลื่อนขึ้น" data-mv="-1">▲</button><button aria-label="เลื่อนลง" data-mv="1">▼</button></span></li>`}).join('');
   $('#sortFb').hidden=true;
 }
 $('#sortList').addEventListener('click',e=>{
@@ -901,7 +913,7 @@ $('#sortNew').onclick=newSort;
 function renderTimeline(){
   const groups=[];KINGS.forEach(k=>{const g=groups[groups.length-1];if(g&&g.d===k.dynasty)g.ks.push(k);else groups.push({d:k.dynasty,ks:[k]})});
   $('#tl').innerHTML=groups.map(g=>`<div class="tl-dyn" style="--c:var(${DYN[g.d].v})"><h3>ราชวงศ์${g.d} <small>ลำดับ ${g.ks[0].order}${g.ks.length>1?'–'+g.ks[g.ks.length-1].order:''}</small></h3><div class="tl-items">
-    ${g.ks.map(k=>`<button class="tl-item" data-k="${k.order}">${mini(k,{num:false})}<span class="nm"><b style="color:var(--c)">${k.order}.</b> ${esc(k.name)}${k.altName?` <span class="alt">(${esc(k.altName)})</span>`:''}<small>พ.ศ. ${esc(k.reignYears)}</small></span>${known.has(k.order)?'<span class="known" title="จำได้แล้ว">✓</span>':''}</button>`).join('')}
+    ${g.ks.map(k=>`<button class="tl-item" data-k="${k.order}">${mini(k,{num:false})}<span class="nm"><b style="color:var(--c)">${k.order}.</b> ${tn(k.name)}${k.altName?` <span class="alt">(${tn(k.altName)})</span>`:''}<small>พ.ศ. ${esc(k.reignYears)}</small></span>${known.has(k.order)?'<span class="known" title="จำได้แล้ว">✓</span>':''}</button>`).join('')}
     ${g.ks.some(k=>k.order===14)?`<button class="tl-item special" data-k="special"><span class="portrait mini" style="display:grid;place-items:center;color:var(--gold)"><svg viewBox="0 0 24 24" style="width:24px;height:24px"><use href="#i-star"/></svg></span><span class="nm">${SPECIAL.name} <span class="alt">(ไม่นับใน 33)</span><small>พ.ศ. ${SPECIAL.reignYears} · คั่นระหว่าง 14 กับ 15</small></span></button>`:''}
   </div></div>`).join('');
 }
